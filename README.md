@@ -9,7 +9,7 @@ A website where gbv victims can share their experiences with other gbv victims a
    - Bootstrap CSS
    - Django
 
-#### This is a website where Gender Based violence victims can receive counsel from nearby counsellors. Counselling sessions can either be virtual or physical.
+#### This is a website where Gender Based violence victims can receive counsel from nearby counsellors. Counselling sessions can either be virtual or physical. There are also slides that provide more info. about GBV.
 #### The website enables the victims to:
    - Schedule or reschedule appointments (both virtual & physical)
    - Attend virtual sessions
