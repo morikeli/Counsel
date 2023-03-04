@@ -113,7 +113,7 @@ STATICFILES_DIRS = [
     BASE_DIR, 'static',
 ]
 
-MEDIA_URL = 'MediaFiles'
+MEDIA_URL = 'MediaFiles/'
 MEDIA_ROOT = BASE_DIR,'users-media-files/'
 
 # Default primary key field type

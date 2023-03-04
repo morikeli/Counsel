@@ -17,7 +17,7 @@ class PatientsProfile(models.Model):
 
     class Meta:
         verbose_name_plural = 'Patients'
-        ordering = ['name']
+        ordering = ['patient']
 
     def __str__(self):
         return f'{self.patient}'
