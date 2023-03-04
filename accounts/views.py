@@ -3,6 +3,7 @@ from django.contrib import messages
 from .forms import PatientsSignupForm, CounsellorsSignupForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.views import LogoutView
 
 
 @user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False)
@@ -80,4 +81,8 @@ def counsellor_signup_view(request):
 
     context = {'counsellor_signup_form': form}
     return render(request, 'accounts/counsellors-signup.html', context)
+
+@user_passes_test(lambda user: user.is_authenticated is False)
+class UserLogoutView(LogoutView):
+    template_name = 'accounts/logout.html'
 
