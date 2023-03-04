@@ -1,4 +1,4 @@
-{% extends 'users/base.html' %}{% block title %}Create Account{% endblock %}
+{% extends 'accounts/base.html' %}{% block title %}Create Account{% endblock %}
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +21,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            {{signup_form.errors}}{{signup_form|crispy}}
+                            {{signup_form|crispy}}
                         </div>
                     </div>
                     <div class="row">
