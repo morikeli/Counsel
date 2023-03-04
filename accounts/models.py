@@ -10,8 +10,8 @@ class PatientsProfile(models.Model):
     phone_no = models.CharField(max_length=14, blank=False)
     age = models.PositiveIntegerField(default=0, editable=False)
     dob = models.DateField(blank=False)
-
-
+    profile_pic = models.ImageField(upload_to='Patients-Dps/', default='default.png')
+    marital_status = models.CharField(max_length=30, blank=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -30,7 +30,8 @@ class CounsellorsProfile(models.Model):
     phone_no = models.CharField(max_length=14, blank=False)
     age = models.PositiveIntegerField(default=0, editable=False)
     dob = models.DateField(blank=False)
-
+    profile_pic = models.ImageField(upload_to='Patients-Dps/', default='default.png')
+    marital_status = models.CharField(max_length=30, blank=False)
     is_counsellor = models.BooleanField(default=False, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
