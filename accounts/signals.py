@@ -15,13 +15,13 @@ def generate_counsellorID(sender, instance, **kwargs):
         instance.id = str(uuid.uuid4()).replace('-', '')[:18]
 
 @receiver(post_save, sender=User)
-def create_patient_profile(sender, instance, created, **kwargs):
+def create_patients_profile(sender, instance, created, **kwargs):
     if created:
         if instance.is_staff is False and instance.is_superuser is False:
             PatientsProfile.objects.create(patient=instance)
 
 @receiver(post_save, sender=User)
-def create_patient_profile(sender, instance, created, **kwargs):
+def create_counsellors_profile(sender, instance, created, **kwargs):
     if created:
         if instance.is_staff is True and instance.is_superuser is False:
-            PatientsProfile.objects.create(patient=instance)
+            CounsellorsProfile.objects.create(counsellor=instance)
