@@ -33,7 +33,7 @@ class PatientsProfile(models.Model):
             dp.save(self.profile_pic.path)
 
 
-class CounsellorsProfile(models.Model):
+class TherapistsProfile(models.Model):
     id  = models.CharField(max_length=18, primary_key=True, unique=True, editable=False)
     counsellor = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
     gender = models.CharField(max_length=7, blank=False)
@@ -42,7 +42,7 @@ class CounsellorsProfile(models.Model):
     dob = models.DateField(blank=False)
     profile_pic = models.ImageField(upload_to='Counsellors-Dps/', default='default.png')
     marital_status = models.CharField(max_length=30, blank=False)
-    is_counsellor = models.BooleanField(default=False, editable=False)
+    is_therapist = models.BooleanField(default=False, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 

@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import PatientsProfile, CounsellorsProfile
+from .models import PatientsProfile, TherapistsProfile
 from django import forms
 
 # custom forms for patients
@@ -59,7 +59,7 @@ class EditPatientsProfileForm(forms.ModelForm):
 
 
 # custom made forms for counsellors
-class CounsellorsSignupForm(UserCreationForm):
+class TherapistsSignupForm(UserCreationForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     email = forms.CharField(required=True)
@@ -69,7 +69,7 @@ class CounsellorsSignupForm(UserCreationForm):
 
 
 
-class UpdateCounsellorsProfileForm(forms.ModelForm):
+class UpdateTherapistsProfileForm(forms.ModelForm):
     SELECT_GENDER = (
         (None, '-- Select gender --'),
         ('Male', 'Male'),
@@ -88,10 +88,10 @@ class UpdateCounsellorsProfileForm(forms.ModelForm):
     marital_status = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_MARITAL_STATUS, required=True)
 
     class Meta:
-        model = PatientsProfile
+        model = TherapistsProfile
         fields = ['dob', 'gender', 'phone_no', 'marital_status', 'profile_pic']
 
-class EditCounsellorsProfileForm(forms.ModelForm):
+class EditTherapistsProfileForm(forms.ModelForm):
     SELECT_GENDER = (
         (None, '-- Select gender --'),
         ('Male', 'Male'),
@@ -110,5 +110,5 @@ class EditCounsellorsProfileForm(forms.ModelForm):
     marital_status = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_MARITAL_STATUS, required=True)
 
     class Meta:
-        model = PatientsProfile
+        model = TherapistsProfile
         fields = ['dob', 'gender', 'phone_no', 'marital_status', 'profile_pic']

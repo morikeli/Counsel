@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from accounts.models import PatientsProfile, CounsellorsProfile
+from accounts.models import PatientsProfile, TherapistsProfile
 
 
 class Appointments(models.Model):
@@ -24,7 +24,7 @@ class Appointments(models.Model):
 
 class Facilities(models.Model):
     id = models.CharField(max_length=20, primary_key=True, editable=False, unique=True)
-    medic = models.OneToOneField(CounsellorsProfile, on_delete=models.CASCADE)
+    medic = models.OneToOneField(TherapistsProfile, on_delete=models.CASCADE)
     role = models.CharField(max_length=15, blank=False)
     facility_name = models.CharField(max_length=70, blank=False)
     location = models.CharField(max_length=70, blank=False)
