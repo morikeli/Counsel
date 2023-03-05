@@ -12,6 +12,7 @@ class PatientsProfile(models.Model):
     dob = models.DateField(blank=False)
     profile_pic = models.ImageField(upload_to='Patients-Dps/', default='default.png')
     marital_status = models.CharField(max_length=30, blank=False)
+    is_patient = models.BooleanField(default=False, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

@@ -56,6 +56,7 @@ def signup_view(request):
         form = PatientsSignupForm(request.POST)
         if form.is_valid():
             new_user = form.save(commit=False)
+            new_user.is_patient = True
             new_user.save()
 
             messages.success(request, f'Account {new_user.username} created successfully!')
