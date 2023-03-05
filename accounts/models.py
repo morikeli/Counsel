@@ -35,7 +35,7 @@ class PatientsProfile(models.Model):
 
 class TherapistsProfile(models.Model):
     id  = models.CharField(max_length=18, primary_key=True, unique=True, editable=False)
-    counsellor = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
+    therapist = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
     gender = models.CharField(max_length=7, blank=False)
     phone_no = models.CharField(max_length=14, blank=False)
     age = models.PositiveIntegerField(default=0, editable=False)
@@ -48,7 +48,7 @@ class TherapistsProfile(models.Model):
 
     class Meta:
         verbose_name_plural = 'Counsellors'
-        ordering = ['counsellor']
+        ordering = ['therapist']
 
     def __str__(self):
         return f'{self.counsellor}'

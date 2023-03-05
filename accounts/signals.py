@@ -24,4 +24,4 @@ def create_patients_profile(sender, instance, created, **kwargs):
 def create_counsellors_profile(sender, instance, created, **kwargs):
     if created:
         if instance.is_staff is True and instance.is_superuser is False:
-            TherapistsProfile.objects.create(counsellor=instance)
+            TherapistsProfile.objects.create(therapist=instance)
