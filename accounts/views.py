@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.views import LogoutView
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import PatientsProfile, CounsellorsProfile
 
 
@@ -81,7 +82,8 @@ def counsellor_signup_view(request):
     context = {'counsellor_signup_form': form}
     return render(request, 'counsellors/counsellors-signup.html', context)
 
-
+@login_required(login_url='user_login')
+@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.patientsprofile.is_patient is True)
 def updatepatientsprofile_view(request, patient_name):
     current_patient = PatientsProfile.objects.get(patient=patient_name)
     updateprofile_form = UpdatePatientsProfileForm(instance=request.user.patientsprofile)
@@ -106,8 +108,8 @@ def updatepatientsprofile_view(request, patient_name):
     context = {'UpdateProfileForm': updateprofile_form, 'EditProfileForm': editprofile_form}
     return render(request, 'patients/profile.html', context)
 
-
-
+@login_required(login_url='user_login')
+@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.counsellorsprofile.is_counsellor is True)
 def updatecounsellorsprofile_view(request, medic_name):
     current_patient = CounsellorsProfile.objects.get(counsellor=medic_name)
     updateprofile_form = UpdateCounsellorsProfileForm(instance=request.user.counsellorsprofile)
