@@ -25,11 +25,11 @@ def login_view(request):
                 if user_account.is_staff is True:
                     if user_account.counsellorsprofile is True:
                         auth.login(request, user_account)
-                        return redirect('counsellors_homepage')
+                        return redirect('therapist_homepage')
                     
                     else:
                         auth.login(request, user_account)
-                        return redirect('counsellors_profile')
+                        return redirect('therapist_profile')
                 
                 elif user_account.is_staff is False:
                     if  user_account.is_staff is False:
@@ -60,7 +60,7 @@ def signup_view(request):
             new_user.save()
 
             messages.success(request, f'Account {new_user.username} created successfully!')
-            return redirect('user_login')
+            return redirect('patient_profile')
 
     context = {'signup_form': form}
     return render(request, 'patients/signup.html', context)
@@ -77,10 +77,10 @@ def counsellor_signup_view(request):
             new_counsellor.save()
 
             messages.success(request, f'Account for {new_counsellor.username} created successfully!')
-            return redirect('user_login')
+            return redirect('therapist_profile')
 
 
-    context = {'counsellor_signup_form': form}
+    context = {'therapist_signup_form': form}
     return render(request, 'counsellors/counsellors-signup.html', context)
 
 @login_required(login_url='user_login')
@@ -98,13 +98,13 @@ def patientsprofile_view(request, patient_name):
             updateprofile_form.save()
 
             messages.success(request, 'Your profile was updated successfully!')
-            return redirect('patients_profile', patient_name)
+            return redirect('patient_profile', patient_name)
 
         elif editprofile_form.is_valid():
             editprofile_form.save()
 
             messages.info(request, 'Profile edited successfully!')
-            return redirect('patients_profile', patient_name)
+            return redirect('patient_profile', patient_name)
 
     context = {'UpdateProfileForm': updateprofile_form, 'EditProfileForm': editprofile_form}
     return render(request, 'patients/profile.html', context)
