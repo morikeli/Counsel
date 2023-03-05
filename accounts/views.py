@@ -1,9 +1,11 @@
+from .forms import (PatientsSignupForm, CounsellorsSignupForm, UpdatePatientsProfileForm,
+    UpdateCounsellorsProfileForm, EditPatientsProfileForm, EditCounsellorsProfileForm)
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import PatientsSignupForm, CounsellorsSignupForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.views import LogoutView
+from .models import PatientsProfile, CounsellorsProfile
 
 
 def login_view(request):
@@ -59,7 +61,7 @@ def signup_view(request):
             return redirect('user_login')
 
     context = {'signup_form': form}
-    return render(request, 'accounts/signup.html', context)
+    return render(request, 'patients/signup.html', context)
 
 
 def counsellor_signup_view(request):
@@ -77,7 +79,59 @@ def counsellor_signup_view(request):
 
 
     context = {'counsellor_signup_form': form}
-    return render(request, 'accounts/counsellors-signup.html', context)
+    return render(request, 'counsellors/counsellors-signup.html', context)
+
+
+def updatepatientsprofile_view(request, patient_name):
+    current_patient = PatientsProfile.objects.get(patient=patient_name)
+    updateprofile_form = UpdatePatientsProfileForm(instance=request.user.patientsprofile)
+    editprofile_form = EditPatientsProfileForm(instance=request.user.patientsprofile)
+
+    if request.method == 'POST':
+        updateprofile_form = UpdatePatientsProfileForm(request.POST, request.FILES, instance=request.user.patientsprofile)
+        editprofile_form = EditPatientsProfileForm(request.POST, request.FILES, instance=request.user.patientsprofile)
+
+        if updateprofile_form.is_valid():
+            updateprofile_form.save()
+
+            messages.success(request, 'Your profile was updated successfully!')
+            return redirect('patients_profile', patient_name)
+
+        elif editprofile_form.is_valid():
+            editprofile_form.save()
+
+            messages.info(request, 'Profile edited successfully!')
+            return redirect('patients_profile', patient_name)
+
+    context = {'UpdateProfileForm': updateprofile_form, 'EditProfileForm': editprofile_form}
+    return render(request, 'patients/profile.html', context)
+
+
+
+def updatecounsellorsprofile_view(request, medic_name):
+    current_patient = CounsellorsProfile.objects.get(counsellor=medic_name)
+    updateprofile_form = UpdateCounsellorsProfileForm(instance=request.user.counsellorsprofile)
+    editprofile_form = EditCounsellorsProfileForm(instance=request.user.counsellorsprofile)
+
+    if request.method == 'POST':
+        updateprofile_form = UpdatePatientsProfileForm(request.POST, request.FILES, instance=request.user.counsellorsprofile)
+        editprofile_form = EditPatientsProfileForm(request.POST, request.FILES, instance=request.user.counsellorsprofile)
+
+        if updateprofile_form.is_valid():
+            updateprofile_form.save()
+
+            messages.success(request, 'Your profile was updated successfully!')
+            return redirect('patients_profile', patient_name)
+
+        elif editprofile_form.is_valid():
+            editprofile_form.save()
+
+            messages.info(request, 'Profile edited successfully!')
+            return redirect('patients_profile', patient_name)
+
+    context = {'UpdateProfileForm': updateprofile_form, 'EditProfileForm': editprofile_form}
+    return render(request, 'counsellors/profile.html', context)
+
 
 class UserLogoutView(LogoutView):
     template_name = 'accounts/logout.html'
