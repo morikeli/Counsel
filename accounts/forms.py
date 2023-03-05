@@ -58,7 +58,7 @@ class EditPatientsProfileForm(forms.ModelForm):
         fields = ['dob', 'gender', 'phone_no', 'marital_status', 'profile_pic']
 
 
-# custom made forms for counsellors
+# custom made forms for therapists
 class TherapistsSignupForm(UserCreationForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
