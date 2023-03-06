@@ -142,6 +142,6 @@ def therapistprofile_view(request, medic_name):
     return render(request, 'counsellors/profile.html', context)
 
 
-class UserLogoutView(LogoutView):
+class LogoutUserView(LogoutView):
     template_name = 'accounts/logout.html'
 
