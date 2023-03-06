@@ -5,14 +5,16 @@ from django.contrib import messages
 
 
 # views to handle patient requests
-
+@login_required(login_url='user_login')
+@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.patientsprofile.is_patient is True)
 def patient_homepage_view(request):
 
     context = {}
     return render(request, 'users/', context)
 
 
-
+@login_required(login_url='user_login')
+@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.patientsprofile.is_patient is True)
 def schedule_appointments_view(request):
     form = ScheduleAppointmentsForm()
 
@@ -32,8 +34,8 @@ def schedule_appointments_view(request):
 
 
 # views to handle therapists requests
-
-
+@login_required(login_url='user_login')
+@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.therapistsprofile.is_therapist is True and user.therapistprofile.facilities is not None)
 def therapists_homepage_view(request):
 
     context = {}
@@ -41,8 +43,8 @@ def therapists_homepage_view(request):
 
 
 # this view is used by a therapist to add medical facility he/she is employed.
-
-
+@login_required(login_url='user_login')
+@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.therapistsprofile.is_therapist is True)
 def update_facility_info_view(request):
     form = AddNewFacilityInfoForm()
 
@@ -59,3 +61,4 @@ def update_facility_info_view(request):
 
     context = {}
     return render(request, 'therapists/', context)
+
