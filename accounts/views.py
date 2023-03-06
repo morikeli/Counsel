@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.views import LogoutView
+from django.contrib import auth
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import PatientsProfile, TherapistsProfile
 
@@ -55,10 +56,12 @@ def signup_view(request):
     if request.method == 'POST':
         form = PatientsSignupForm(request.POST)
         if form.is_valid():
-            form.save()
+            # this code fetches the name of the patient. The name is used as a parameter when redirecting a user to his/her homepage.
+            new_patient_account = form.save(commit=False)
+            new_patient_account.save()
 
             messages.success(request, f'Account created successfully!')
-            return redirect('patient_profile')
+            return redirect('patient_profile', new_patient_account.patientsprofile.patient)
 
     context = {'signup_form': form}
     return render(request, 'patients/signup.html', context)
