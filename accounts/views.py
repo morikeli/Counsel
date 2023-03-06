@@ -24,22 +24,22 @@ def login_view(request):
             
             if user_account is not None:
                 if user_account.is_staff is True:
-                    if user_account.counsellorsprofile is True:
+                    if user_account.therapistsprofile is True and user_account.therapistsprofile.is_therapist is True:
                         auth.login(request, user_account)
-                        return redirect('therapist_homepage')
+                        return redirect('therapist_profile', user_account.therapistsprofile.medic)
                     
                     else:
                         auth.login(request, user_account)
-                        return redirect('therapist_profile')
+                        return redirect('therapist_homepage')
                 
                 elif user_account.is_staff is False:
-                    if  user_account.is_staff is False:
+                    if  user_account.is_staff is False and user_account.patientsprofile.is_patient is False:
                         auth.login(request, user_account)
-                        return redirect('patient_homepage')
+                        return redirect('patient_profile', user_account.patientsprofile.patient)
 
                     else:
                         auth.login(request, user_account)
-                        return redirect('patient_profile')
+                        return redirect('patient_homepage')
 
             else:
                 messages.error(request, 'INVALID CREDENTIALS!!')
@@ -86,9 +86,9 @@ def counsellor_signup_view(request):
     return render(request, 'counsellors/counsellors-signup.html', context)
 
 @login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.patientsprofile.is_patient is True)
+@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False)
 def patientsprofile_view(request, patient_name):
-    current_patient = PatientsProfile.objects.get(patient=patient_name)     # current patient request
+    current_patient = PatientsProfile.objects.get(patient__username=patient_name)     # current patient request
     updateprofile_form = UpdatePatientsProfileForm(instance=request.user.patientsprofile)
     editprofile_form = EditPatientsProfileForm(instance=request.user.patientsprofile)
 
@@ -114,9 +114,9 @@ def patientsprofile_view(request, patient_name):
     return render(request, 'patients/profile.html', context)
 
 @login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.therapistsprofile.is_therapist is True)
+@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False)
 def therapistprofile_view(request, medic_name):
-    current_therapist = TherapistsProfile.objects.get(counsellor=medic_name)    # get a logged in therapist request
+    current_therapist = TherapistsProfile.objects.get(counsellor__username=medic_name)    # get a logged in therapist request
     updateprofile_form = UpdateTherapistsProfileForm(instance=request.user.therapistsprofile)
     editprofile_form = EditTherapistsProfileForm(instance=request.user.therapistsprofile)
 
