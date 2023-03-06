@@ -10,7 +10,7 @@ from django.contrib import messages
 def patient_homepage_view(request):
 
     context = {}
-    return render(request, 'users/', context)
+    return render(request, 'users/homepage.html', context)
 
 
 @login_required(login_url='user_login')
@@ -39,7 +39,7 @@ def schedule_appointments_view(request):
 def therapists_homepage_view(request):
 
     context = {}
-    return render(request, 'therapists/', context)
+    return render(request, 'therapists/homepage.html', context)
 
 
 # this view is used by a therapist to add medical facility he/she is employed.
