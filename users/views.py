@@ -24,7 +24,7 @@ def schedule_appointments_view(request):
             patient.save()
 
             message.success(request, 'Appointment schedule successfully!')
-            return redirect('')
+            return redirect('schedule_appointment')
 
 
     context = {'ScheduleAppointmentForm': form}
@@ -54,7 +54,7 @@ def update_facility_info_view(request):
             new_facility_record.save()
 
             messages.success(request, 'Facility has been updated successfully!')
-            return redirect('')
+            return redirect('medical_facility')
             
 
     context = {}
