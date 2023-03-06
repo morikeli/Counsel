@@ -13,13 +13,3 @@ def generate_facilitiesID(sender, instance, **kwargs):
 def generate_appointmentsID(sender, instance, **kwargs):
     if instance.id == "":
         instance.id = str(uuid.uuid4()).replace("-", "").upper()[:20]
-
-@receiver(post_save, sender=TherapistsProfile)
-def save_scheduled_appointments(sender, created, instance, **kwargs):
-    if created:
-        Facilities.objects.create(name=instance)
-
-@receiver(post_save, sender=PatientsProfile)
-def save_scheduled_appointments(sender, created, instance, **kwargs):
-    if created:
-        Appointments.objects.create(name=instance)
