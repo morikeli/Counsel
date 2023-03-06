@@ -40,8 +40,10 @@ def therapists_homepage_view(request):
     return render(request, 'therapists/', context)
 
 
+# this view is used by a therapist to add medical facility he/she is employed.
 
-def update_facility_info(request):
+
+def update_facility_info_view(request):
     form = AddNewFacilityInfoForm()
 
     if request.method == 'POST':
