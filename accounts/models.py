@@ -9,7 +9,7 @@ class PatientsProfile(models.Model):
     gender = models.CharField(max_length=7, blank=False)
     phone_no = models.CharField(max_length=14, blank=False)
     age = models.PositiveIntegerField(default=0, editable=False)
-    dob = models.DateField(blank=False)
+    dob = models.DateField(blank=False, null=True)
     profile_pic = models.ImageField(upload_to='Patients-Dps/', default='default.png')
     marital_status = models.CharField(max_length=30, blank=False)
     is_patient = models.BooleanField(default=False, editable=False)
