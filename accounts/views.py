@@ -55,11 +55,9 @@ def signup_view(request):
     if request.method == 'POST':
         form = PatientsSignupForm(request.POST)
         if form.is_valid():
-            new_user = form.save(commit=False)
-            new_user.is_patient = True
-            new_user.save()
+            form.save()
 
-            messages.success(request, f'Account {new_user.username} created successfully!')
+            messages.success(request, f'Account created successfully!')
             return redirect('patient_profile')
 
     context = {'signup_form': form}
@@ -73,10 +71,11 @@ def counsellor_signup_view(request):
         form = CounsellorsSignupForm(request.POST)
 
         if form.is_valid():
-            new_counsellor = form.save(commit=False)
-            new_counsellor.save()
+            new_therapist_account = form.save(commit=False)
+            new_therapist_account.is_staff = True
+            new_therapist_account.save()
 
-            messages.success(request, f'Account for {new_counsellor.username} created successfully!')
+            messages.success(request, f'Account for {new_therapist_account.username} created successfully!')
             return redirect('therapist_profile')
 
 
@@ -95,7 +94,9 @@ def patientsprofile_view(request, patient_name):
         editprofile_form = EditPatientsProfileForm(request.POST, request.FILES, instance=request.user.patientsprofile)
 
         if updateprofile_form.is_valid():
-            updateprofile_form.save()
+            new_patient = updateprofile_form.save(commit=False)
+            new_patient.is_patient = True
+            new_patient.save()
 
             messages.success(request, 'Your profile was updated successfully!')
             return redirect('patient_profile', patient_name)
@@ -121,7 +122,9 @@ def therapistprofile_view(request, medic_name):
         editprofile_form = EditTherapistsProfileForm(request.POST, request.FILES, instance=request.user.therapistsprofile)
 
         if updateprofile_form.is_valid():
-            updateprofile_form.save()
+            new_therapist = updateprofile_form.save(commit=False)
+            new_therapist.is_therapist = True
+            new_therapist.save()
 
             messages.success(request, 'Your profile was updated successfully!')
             return redirect('therapist_profile', medic_name)
