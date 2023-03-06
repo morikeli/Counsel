@@ -7,6 +7,7 @@ from django import forms
 class PatientsSignupForm(UserCreationForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
+    username = forms.CharField(required=True, widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     email = forms.CharField(required=True)
     class Meta:
         model = User
