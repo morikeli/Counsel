@@ -74,71 +74,6 @@
 							</div>
 						</div>
 
-						<div class="col-xxl-4 col-xl-12">
-							<div class="card">
-								<div class="card-body">
-									<h5 class="card-title mb-1">GBV info. slide <hr class="dropdown-divider mb-0"></h5>
-									<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-										<div class="carousel-indicators">
-											<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-											<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-											<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-											<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
-											<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
-											<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
-											<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="6" aria-label="Slide 7"></button>
-											<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="7" aria-label="Slide 8"></button>
-
-										</div>
-										<div class="carousel-inner">
-											<div class="carousel-item active">
-												<img src="{% static 'users/types-gbv.jpg' %}" class="d-block w-100" alt="slide-img">
-											</div>
-											<div class="carousel-item">
-												<img src="{% static 'users/info1.png' %}" class="d-block w-100" alt="slide-img">
-											</div>
-											<div class="carousel-item">
-												<img src="{% static 'users/info2.gif' %}" class="d-block w-100" alt="slide-img">
-											</div>
-											<div class="carousel-item">
-												<img src="{% static 'users/info3.jpg' %}" class="d-block w-100" alt="slide-img">
-											</div>
-											<div class="carousel-item">
-												<img src="{% static 'users/gbv-zambia.png' %}" class="d-block w-100" alt="slide-img">
-											</div>
-											<div class="carousel-item">
-												<img src="{% static 'users/stop-gbv1.png' %}" class="d-block w-100" alt="slide-img">
-											</div>
-											<div class="carousel-item">
-												<img src="{% static 'users/gbv.jpg' %}" class="d-block w-100" alt="slide-img">
-												<div class="carousel-caption d-none d-md-block mt-1">
-													<p>Lift your hands to ask a question not for violence</p>
-												</div>
-											</div>
-											<div class="carousel-item">
-												<img src="{% static 'users/end.jpg' %}" class="d-block w-100" alt="slide-img">
-												<div class="carousel-caption d-none d-md-block">
-													<p>Usinyamaze, tusaidiane kuangamiza GBV</p>
-												</div>
-											</div>
-
-										</div>
-						
-										<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-											<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-											<span class="visually-hidden">Previous</span>
-										</button>
-										<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-											<span class="carousel-control-next-icon" aria-hidden="true"></span>
-											<span class="visually-hidden">Next</span>
-										</button>
-
-									</div>
-					
-								</div>
-							  </div>
-						</div>
-
 						<div class="col-12">
 							<div class="card">
 								<div class="filter">
@@ -156,7 +91,7 @@
 								<div class="card-body">
 									<h5 class="card-title">Scheduled sessions <span>/Today</span></h5>
 									<div id="reportsChart"></div>
-									{% block scripts %}
+									
 									<script>
 										
 										document.addEventListener("DOMContentLoaded", () => {
@@ -210,7 +145,7 @@
 										}).render();
 										});
 									</script>
-									{% endblock %}
+									
 								</div>
 							</div>
 						</div>
