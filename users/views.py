@@ -6,7 +6,7 @@ from django.contrib import messages
 
 # views to handle patient requests
 @login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.patientsprofile.is_patient is True)
+@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_patient is True)
 def patient_homepage_view(request):
 
     context = {}
@@ -14,18 +14,18 @@ def patient_homepage_view(request):
 
 
 @login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.patientsprofile.is_patient is True)
+@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_patient is True)
 def schedule_appointments_view(request):
     form = ScheduleAppointmentsForm()
 
     if request.method == 'POST':
         form = ScheduleAppointmentsForm(request.POST)
         if form.is_valid():
-            patient = forms.save(commit=False)
+            patient = form.save(commit=False)
             patient.name = request.user.patientsprofile
             patient.save()
 
-            message.success(request, 'Appointment schedule successfully!')
+            messages.success(request, 'Appointment schedule successfully!')
             return redirect('schedule_appointment')
 
 
@@ -35,7 +35,7 @@ def schedule_appointments_view(request):
 
 # views to handle therapists requests
 @login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.therapistsprofile.is_therapist is True and user.therapistprofile.facilities is not None)
+@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.is_therapist is True and user.therapistprofile.facilities is not None)
 def therapists_homepage_view(request):
 
     context = {}
@@ -44,7 +44,7 @@ def therapists_homepage_view(request):
 
 # this view is used by a therapist to add medical facility he/she is employed.
 @login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.therapistsprofile.is_therapist is True)
+@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.is_therapist is True)
 def update_facility_info_view(request):
     form = AddNewFacilityInfoForm()
 
