@@ -17,10 +17,10 @@ class SignupForm(UserCreationForm):
         ('Divorced', 'Divorced')
     )
 
-    first_name = forms.CharField(required=True)
-    last_name = forms.CharField(required=True)
-    username = forms.CharField(required=True, widget=forms.TextInput(attrs={'autocomplete': 'off'}))
-    email = forms.CharField(required=True)
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), required=True)
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), required=True)
+    username = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off', 'class': 'mb-2'}), required=True)
+    email = forms.CharField(widget=forms.TextInput(attrs={'type': 'email', 'class': 'mb-2'}), required=True)
     dob = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'mb-2'}), required=True)
     gender = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_GENDER, required=True)
     phone_no = forms.CharField(widget=forms.TextInput(attrs={'type': 'tel', 'class': 'mb-2'}), required=True)
@@ -29,7 +29,7 @@ class SignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'username', 'email', 'dob', 'gender', 'phone_no', 'marital_status', 'password1', 'password2']
 
 
 class UpdateProfileForm(forms.ModelForm):
