@@ -1,14 +1,13 @@
-from .models import PatientsProfile, TherapistsProfile
+from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
+from .forms import SignupForm
+from .models import User
 
 
-@admin.register(PatientsProfile)
-class PatientsTable(admin.ModelAdmin):
+class UsersLayout(UserAdmin):
+    model = User
+    add_form = SignupForm
     list_display = ['patient', 'gender', 'marital_status', 'is_patient']
     readonly_fields = ['patient', 'gender', 'phone_no', 'dob', 'marital_status', 'is_patient', 'profile_pic']
 
-
-@admin.register(TherapistsProfile)
-class TherapistsTable(admin.ModelAdmin):
-    list_display = ['therapist', 'gender', 'marital_status', 'is_therapist']
-    readonly_fields = ['therapist', 'gender', 'phone_no', 'dob', 'marital_status', 'is_therapist', 'profile_pic']
+admin.site.register(User, UsersLayout)
