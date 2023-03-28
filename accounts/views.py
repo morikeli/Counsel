@@ -23,11 +23,11 @@ def login_view(request):
             if user_account is not None:
                 if user_account.is_therapist is True:
                     auth.login(request, user_account)
-                    return redirect('homepage', user_account.get_username)
+                    return redirect('therapist_homepage', user_account.username)
                 
                 else:
                     auth.login(request, user_account)
-                    return redirect('homepage', user_account.get_username)
+                    return redirect('patient_homepage', user_account.username)
 
             else:
                 messages.error(request, 'INVALID CREDENTIALS!!')
@@ -51,7 +51,7 @@ def signup_view(request):
             return redirect('profile', new_user.username)
 
     context = {'signup_form': form}
-    return render(request, 'patients/signup.html', context)
+    return render(request, 'accounts/signup.html', context)
 
 
 @login_required(login_url='user_login')
@@ -68,7 +68,7 @@ def user_profile_view(request, name):
             new_patient.is_patient = True
             new_patient.save()
 
-            messages.success(request, 'Your profile was updated successfully!')
+            messages.info(request, 'Your profile was edited successfully!')
             return redirect('profile', name)
 
     context = {'UpdateProfileForm': profile_form}
