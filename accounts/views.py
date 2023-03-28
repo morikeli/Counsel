@@ -21,23 +21,13 @@ def login_view(request):
             user_account = auth.authenticate(username=username, password=password)
             
             if user_account is not None:
-                if user_account.is_staff is True:
-                    if user_account.is_therapist is True:
-                        auth.login(request, user_account)
-                        return redirect('profile')
-                    
-                    else:
-                        auth.login(request, user_account)
-                        return redirect('therapist_homepage')
+                if user_account.is_therapist is True:
+                    auth.login(request, user_account)
+                    return redirect('homepage', user_account.get_username)
                 
-                elif user_account.is_staff is False:
-                    if  user_account.is_patient is True:
-                        auth.login(request, user_account)
-                        return redirect('profile')
-
-                    else:
-                        auth.login(request, user_account)
-                        return redirect('patient_homepage')
+                else:
+                    auth.login(request, user_account)
+                    return redirect('homepage', user_account.get_username)
 
             else:
                 messages.error(request, 'INVALID CREDENTIALS!!')
