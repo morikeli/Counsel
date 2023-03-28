@@ -22,7 +22,7 @@ def schedule_appointments_view(request):
         form = ScheduleAppointmentsForm(request.POST)
         if form.is_valid():
             patient = form.save(commit=False)
-            patient.name = request.user.patientsprofile
+            patient.name = request.user
             patient.save()
 
             messages.success(request, 'Appointment schedule successfully!')
@@ -52,13 +52,13 @@ def update_facility_info_view(request):
         form = AddNewFacilityInfoForm(request.POST)
         if form.is_valid():
             new_facility_record = form.save(commit=False)
-            new_facility_record.medic = request.user.therapistprofile
+            new_facility_record.medic = request.user
             new_facility_record.save()
 
             messages.success(request, 'Facility has been updated successfully!')
             return redirect('medical_facility')
             
 
-    context = {}
+    context = {'AddFacilityForm': form}
     return render(request, 'therapists/', context)
 

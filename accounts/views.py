@@ -58,7 +58,7 @@ def signup_view(request):
             new_user.save()
 
             messages.success(request, f'Account created successfully!')
-            return redirect('patient_profile', new_user.username)
+            return redirect('profile', new_user.username)
 
     context = {'signup_form': form}
     return render(request, 'patients/signup.html', context)
@@ -90,7 +90,7 @@ def user_profile_view(request, name):
             return redirect('profile', name)
 
     context = {'UpdateProfileForm': updateprofile_form, 'EditProfileForm': editprofile_form}
-    return render(request, 'patients/profile.html', context)
+    return render(request, 'accounts/profile.html', context)
 
 
 class LogoutUserView(LogoutView):
