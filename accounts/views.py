@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .forms import SignupForm, UpdateProfileForm, EditProfileForm
+from .forms import SignupForm, UpdateProfileForm
 from .models import User
 
 
@@ -68,28 +68,20 @@ def signup_view(request):
 @user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False)
 def user_profile_view(request, name):
     user_obj = User.objects.get(username=name)
-    updateprofile_form = UpdateProfileForm(instance=user_obj)
-    editprofile_form = EditProfileForm(instance=user_obj)
+    profile_form = UpdateProfileForm(instance=user_obj)
 
     if request.method == 'POST':
-        updateprofile_form = UpdateProfileForm(request.POST, request.FILES, instance=user_obj)
-        editprofile_form = EditProfileForm(request.POST, request.FILES, instance=user_obj)
+        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=user_obj)
 
-        if updateprofile_form.is_valid():
-            new_patient = updateprofile_form.save(commit=False)
+        if profile_form.is_valid():
+            new_patient = profile_form.save(commit=False)
             new_patient.is_patient = True
             new_patient.save()
 
             messages.success(request, 'Your profile was updated successfully!')
             return redirect('profile', name)
 
-        elif editprofile_form.is_valid():
-            editprofile_form.save()
-
-            messages.info(request, 'Profile edited successfully!')
-            return redirect('profile', name)
-
-    context = {'UpdateProfileForm': updateprofile_form, 'EditProfileForm': editprofile_form}
+    context = {'UpdateProfileForm': profile_form}
     return render(request, 'accounts/profile.html', context)
 
 
