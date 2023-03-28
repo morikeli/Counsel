@@ -20,7 +20,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
     class Meta:
-        verbose_name_plural = 'Patients'
+        verbose_name_plural = 'Users'
         ordering = ['username']
 
     def __str__(self):
