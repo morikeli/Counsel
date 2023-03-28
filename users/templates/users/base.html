@@ -9,7 +9,7 @@
 
     <header id="header" class="header fixed-top d-flex align-items-center">
         <div class="d-flex align-items-center justify-content-between">
-            <a href="{% url 'patient_homepage' %}" class="logo d-flex align-items-center">
+            <a href="{% url 'patient_homepage' request.user.username %}" class="logo d-flex align-items-center">
                 <span class="d-none d-lg-block">Counsel</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -107,20 +107,20 @@
 
                 <li class="nav-item dropdown pe-3">
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="{{ request.user.patientsprofile.profile_pic.url }}" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">{{request.user.patientsprofile.patient|title}}</span>
+                        <img src="{{ request.user.profile_pic.url }}" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2">{{request.user.username|title}}</span>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
-                            <h6>{{request.user.patientsprofile.patient|title }}</h6>
+                            <h6>{{request.user.username|title }}</h6>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="{% url 'patient_profile' request.user.patientsprofile.patient %}">
+                            <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' request.user.username %}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -129,7 +129,7 @@
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="{% url 'patient_profile' request.user.patientsprofile.patient %}">
+                            <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' request.user.username %}">
                                 <i class="bi bi-gear"></i>
                                 <span>Account Settings</span>
                             </a>
@@ -164,7 +164,7 @@
     <aside id="sidebar" class="sidebar">
         <ul class="sidebar-nav" id="sidebar-nav">
             <li class="nav-item">
-                <a class="nav-link " href="{% url 'patient_homepage' %}">
+                <a class="nav-link " href="{% url 'patient_homepage' request.user %}">
                     <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
                 </a>
             </li>
@@ -175,7 +175,7 @@
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'patient_profile' request.user.patientsprofile.patient %}">
+                <a class="nav-link" href="{% url 'profile' request.user.username %}">
                     <i class="bi bi-person-bounding-box"></i>
                     <span>Profile</span>
                 </a>
@@ -208,7 +208,7 @@
         </div>
     </footer>
     {% endif %}
-    <a href="{% url 'patient_homepage' %}" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi-arrow-up-short"></i></a>
+    <a href="{% url 'patient_homepage' request.user %}" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi-arrow-up-short"></i></a>
 
     <script src="{% static 'vendor/apexcharts/apexcharts.min.js' %}"></script>
     <script src="{% static 'vendor/chart.js/chart.min.js' %}"></script>
