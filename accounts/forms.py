@@ -25,7 +25,7 @@ class SignupForm(UserCreationForm):
     gender = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_GENDER, required=True)
     phone_no = forms.CharField(widget=forms.TextInput(attrs={'type': 'tel', 'class': 'mb-2'}), required=True)
     marital_status = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_MARITAL_STATUS, required=True)
-    is_therapist = forms.BooleanField(widget=forms.CheckboxInput(attrs={'type': 'checkbox', 'class': 'mt-2 mb-3'}), label='I am a therapist', required=True, help_text='Are you a certified/trained therapist, counsellor or a psychiatrist?')
+    is_therapist = forms.BooleanField(widget=forms.CheckboxInput(attrs={'type': 'checkbox', 'class': 'mt-2 mb-3'}), label='I am a therapist', required=False, help_text='Are you a certified/trained therapist, counsellor or a psychiatrist?')
 
 
     class Meta:
