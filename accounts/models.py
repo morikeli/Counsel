@@ -22,7 +22,7 @@ class User(AbstractUser):
 
     class Meta:
         verbose_name_plural = 'Patients'
-        ordering = ['patient']
+        ordering = ['username']
 
     def __str__(self):
         return self.username

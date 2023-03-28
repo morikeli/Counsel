@@ -10,6 +10,6 @@ class FacilitiesTable(admin.ModelAdmin):
 
 @admin.register(Appointments)
 class AppointmentsTable(admin.ModelAdmin):
-    list_display = ['name', 'therapist_name', 'session', 'approved']
-    readonly_fields = ['name', 'therapist_name', 'appointment_date', 'appointment_time', 'session', 'approved']
+    list_display = ['patient', 'therapist_name', 'session', 'approved']
+    readonly_fields = ['patient', 'therapist_name', 'appointment_date', 'appointment_time', 'session', 'approved']
 
