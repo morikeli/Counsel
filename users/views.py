@@ -2,19 +2,21 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ScheduleAppointmentsForm, AddNewFacilityInfoForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from .models import User
 
 
 # views to handle patient requests
 @login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_patient is True)
-def patient_homepage_view(request):
+@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_therapist is False)
+def patient_homepage_view(request, patient_name):
+    patient_obj = User.objects.get(username=patient_name)
 
     context = {}
     return render(request, 'users/homepage.html', context)
 
 
 @login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_patient is True)
+@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_therapist is False)
 def schedule_appointments_view(request):
     form = ScheduleAppointmentsForm()
 
@@ -36,7 +38,9 @@ def schedule_appointments_view(request):
 # views to handle therapists requests
 @login_required(login_url='user_login')
 @user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.is_therapist is True and user.therapistprofile.facilities is not None)
-def therapists_homepage_view(request):
+def therapists_homepage_view(request, therapist_name):
+    therapist_obj = User.objects.get(username=therapist_name)
+
 
     context = {}
     return render(request, 'therapists/homepage.html', context)
