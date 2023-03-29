@@ -539,26 +539,17 @@ h1, h2, h3, h4, h5, h6 {
 .sidebar-nav .nav-link .bi-mic-fill {
 	color: #18d26e;
 }
-.sidebar-nav .nav-link .ri-clipboard-fill {
+.sidebar-nav .nav-link .bi-people-fill {
 	color: brown;
-}
-.sidebar-nav .nav-link .bi-camera-video-fill {
-	color: #ed3c0d
 }
 .sidebar-nav .nav-link .bi-calendar-day-fill {
 	color: blueviolet;
-}
-.sidebar-nav .nav-link .bi-telephone-outbound-fill {
-	color: #fcaf08;
 }
 .sidebar-nav .nav-link .bi-person-circle {
 	color: #2487ce;
 }
 .sidebar-nav .nav-link .bi-play-circle-fill {
 	color: red;
-}
-.sidebar-nav .nav-link .bi-question-circle-fill {
-	color: rgb(22, 209, 22);
 }
 .sidebar-nav .nav-link .bi-door-open-fill {
 	color: rgb(252, 34, 10);
