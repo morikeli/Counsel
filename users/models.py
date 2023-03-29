@@ -30,6 +30,7 @@ class Appointments(models.Model):
     appointment_time = models.TimeField(blank=False)
     session = models.CharField(max_length=20, blank=False)
     approved = models.BooleanField(default=False, editable=False)
+    is_through = models.BooleanField(default=False, editable=False)
     scheduled = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
