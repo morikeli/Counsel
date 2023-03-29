@@ -37,7 +37,7 @@
 											<i class="bi bi-bar-chart-fill"></i>
 										</div>
 										<div class="ps-3">
-											<h6>{{total_sessions_today}}</h6>
+											<h6>{{ total_sessions }}</h6>
 											<span class="text-success small pt-1 fw-bold">{{percent}}%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 										</div>
 									</div>
@@ -66,7 +66,7 @@
 											<i class="bi bi-calendar-date-fill"></i>
 										</div>
 										<div class="ps-3">
-											<h6>{{total_sessions_monthly}}</h6>
+											<h6>{{ total_appointments }}</h6>
 											<span class="text-success small pt-1 fw-bold">{{monthly_percent}}%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 										</div>
 									</div>
@@ -89,7 +89,7 @@
 									</ul>
 								</div>
 								<div class="card-body">
-									<h5 class="card-title">Scheduled sessions <span>/Today</span></h5>
+									<h5 class="card-title">Scheduled sessions <span>| Today</span></h5>
 									<div id="reportsChart"></div>
 									
 									<script>
@@ -166,9 +166,9 @@
 
 								<div class="card-body">
 									<h5 class="card-title">Scheduled sessions <span>| Today</span></h5>
-									<table class="table table-borderless datatable">
+									<table class="table table-bordered">
 										<thead>
-											<tr>
+											<tr class="table-secondary">
 												<th scope="col">#</th>
 												<th scope="col">Medic</th>
 												<th scope="col">Session</th>
@@ -178,17 +178,24 @@
 											</tr>
 										</thead>
 										<tbody>
-											{% for session in appointments %}
+											{% for session in user_sessions %}
 											<tr>
-												<th scope="row"><a href="{% url 'user_sessions' %}">{{forloop.counter}}</a></th>
-												<td>{{ session.medic }}</td>
-												<td>{{ session.type_session }}</td>
+												<th scope="row"><a href="">{{forloop.counter}}</a></th>
+												<td><a href="">{{ session.medic }}</a></td>
+												<td>{{ session.session }}</td>
 												<td>{{ session.appointment_date }}</td>
 												<td>{{ session.appointment_time }}</td>
-												<td>{% if session.approval == 'Approve' %}<span class="badge bg-success">Approved</span>{% else %}<a href="{% url 'user_sessions' %}">Pending... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></a>{% endif %}</td>
+												<td>
+													{% if session.approved is True %}<span class="badge bg-success">Approved</span>
+													{% else %}
+													<a href="">Pending... 
+														<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+													</a>
+													{% endif %}
+												</td>
 											</tr>
 											{% empty %}
-											<tr><td colspan="5" class="form-text text-muted text-center">No appointments available</td></tr>
+											<tr><td colspan="6" class="form-text text-muted text-center">No scheduled sessions available</td></tr>
 											{% endfor %}
 										</tbody>
 									</table>
@@ -201,20 +208,32 @@
 				</div>
 				
 				<div class="col-lg-4">
-					<div class="card">
-						<div class="filter">
-							<a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-							<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-								<li class="dropdown-header text-start">
-								<h6>Filter</h6>
-								</li>
+					<div class="modal fade" id="all-blogs" tabindex="-1">
+						<div class="modal-dialog modal-dialog-scrollable">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Testimonials</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<div class="activity">
+										{% for story in testimonials reversed %}
+										<div class="activity-item d-flex">
+											<div class="activity-label">{{ blog.written|timesince|slice:":4" }}</div>
+											<img src="{{ story. }}" class="rounded-circle activity-badge align-self-start mt-3" height="50px" width="50px" alt="">
+											<div class="activity-content">
+												<p class="fw-bold text-secondary">{{ story. }}</p>
+												<hr class="dropdown-divider">
 
-								<li><a class="dropdown-item" href="#">Today</a></li>
-								<li><a class="dropdown-item" href="#">This Month</a></li>
-								<li><a class="dropdown-item" href="#">This Year</a></li>
-							</ul>
+											</div>
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
 						</div>
-
+					</div>
+					<div class="card">
 						<div class="card-body">
 							<h5 class="card-title"><i class="bi bi-play-circle-fill" style="color: red;"></i> Testimonials <span>| Today</span></h5>
 							<div class="activity">
@@ -228,85 +247,34 @@
 									</div>									
 								</div>
 								<hr class="dropdown-divider mt-0">
+								{% empty %}
+								<div class="activity-item">
+									<h6 class="small fst-italic text-muted text-center">
+										Users stories will appear here ..
+									</h6>
+								</div>
 								{% endfor %}
+								{% if testimonials %}
+								<hr class="dropdown-divider">
+								<div class="text-center">
+									<a href="" style="text-decoration: none;" class="badge bg-primary p-2" data-bs-toggle="modal" data-bs-target="#all-blogs">View more</a>
+								</div>
+								{% endif %}
 							</div>
 						</div>
 					</div>
-
+					
 					<div class="card">
-						<div class="filter">
-							<a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-							<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-								<li class="dropdown-header text-start">
-								<h6>Filter</h6>
-								</li>
-
-								<li><a class="dropdown-item" href="#">Today</a></li>
-								<li><a class="dropdown-item" href="#">This Month</a></li>
-								<li><a class="dropdown-item" href="#">This Year</a></li>
-							</ul>
-						</div>
-
-						<div class="card-body pb-0">
-							<h5 class="card-title">GBV Crime Rate <span>| Today</span></h5>
-
-							<div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-							<script>
-								document.addEventListener("DOMContentLoaded", () => {
-								echarts.init(document.querySelector("#trafficChart")).setOption({
-									tooltip: {
-									trigger: 'item'
-									},
-									legend: {
-									top: '5%',
-									left: 'center'
-									},
-									series: [{
-									name: 'Access From',
-									type: 'pie',
-									radius: ['40%', '70%'],
-									avoidLabelOverlap: false,
-									label: {
-										show: false,
-										position: 'center'
-									},
-									emphasis: {
-										label: {
-										show: true,
-										fontSize: '18',
-										fontWeight: 'bold'
-										}
-									},
-									labelLine: {
-										show: false
-									},
-									data: [{
-										value: 1048,
-										name: 'Search Engine'
-										},
-										{
-										value: 735,
-										name: 'Direct'
-										},
-										{
-										value: 580,
-										name: 'Email'
-										},
-										{
-										value: 484,
-										name: 'Union Ads'
-										},
-										{
-										value: 300,
-										name: 'Video Ads'
-										}
-									]
-									}]
-								});
-								});
-							</script>
-
+						<div class="card-body">
+							<h5 class="card-title">Suggestions</h5>
+							<div class="news therapists">
+								<div class="post-item therapist-info">
+									<img src="" height="50px" width="40px" class="rounded-circle" alt="img">
+									<h4></h4>
+									<p></p>
+									<p></p>
+								</div>
+							</div>
 						</div>
 					</div>
 
@@ -329,21 +297,21 @@
 
 							<div class="news">
 								<div class="post-item clearfix">
-								<img src="{% static 'news.jpg' %}" alt="">
-								<h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
-								<p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
+									<img src="{% static 'news.jpg' %}" alt="">
+									<h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
+									<p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
 								</div>
 
 								<div class="post-item clearfix">
-								<img src="{% static 'news.jpg' %}" alt="">
-								<h4><a href="#">Quidem autem et impedit</a></h4>
-								<p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
+									<img src="{% static 'news.jpg' %}" alt="">
+									<h4><a href="#">Quidem autem et impedit</a></h4>
+									<p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
 								</div>
 
 								<div class="post-item clearfix">
-								<img src="{% static 'news.jpg' %}" alt="">
-								<h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
-								<p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
+									<img src="{% static 'news.jpg' %}" alt="">
+									<h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
+									<p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
 								</div>
 
 							</div>

@@ -165,25 +165,38 @@
         <ul class="sidebar-nav" id="sidebar-nav">
             <li class="nav-item">
                 <a class="nav-link " href="{% url 'patient_homepage' request.user %}">
-                    <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+                    <i class="bi-grid-1x2-fill"></i><span>Dashboard</span>
                 </a>
             </li>
-
-            
-            <li><hr class="dropdown-divider"></li>
-            
-            <li class="nav-heading">Pages</li>
-
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' request.user.username %}">
-                    <i class="bi bi-person-bounding-box"></i>
+                    <i class="bi-people-fill"></i>
+                    <span>Therapists</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' request.user.username %}">
+                    <i class="bi-calendar-day-fill"></i>
+                    <span>Appointments</span>
+                </a>
+            </li>
+            <li><hr></li>
+            <li class="nav-heading">Pages</li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' request.user.username %}">
+                    <i class="bi-person-bounding-box"></i>
                     <span>Profile</span>
                 </a>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' request.user.username %}">
+                    <i class="bi-play-circle-fill"></i>
+                    <span>Testimonials</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">
-                    <i class="bi bi-door-open-fill"></i>
+                    <i class="bi-door-open-fill"></i>
                     <span>Logout</span>
                 </a>
             </li>
