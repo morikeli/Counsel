@@ -48,7 +48,7 @@ ROOT_URLCONF = 'src.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR/'templates/', BASE_DIR/'accounts/templates/', BASE_DIR/'users/templates/'],
+        'DIRS': [BASE_DIR/'templates/', BASE_DIR/'accounts/templates', BASE_DIR/'users/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,6 +74,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'accounts.user'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
