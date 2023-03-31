@@ -169,13 +169,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'profile' request.user.username %}">
+                <a class="nav-link" href="{% url 'therapists' %}">
                     <i class="bi-people-fill"></i>
                     <span>Therapists</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'profile' request.user.username %}">
+                <a class="nav-link" href="{% url 'sessions' request.user %}">
                     <i class="bi-calendar-day-fill"></i>
                     <span>Appointments</span>
                 </a>
@@ -189,7 +189,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'profile' request.user.username %}">
+                <a class="nav-link" href="{% url 'blogs' %}">
                     <i class="bi-play-circle-fill"></i>
                     <span>Testimonials</span>
                 </a>
