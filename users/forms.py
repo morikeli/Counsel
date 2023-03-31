@@ -42,6 +42,8 @@ class AddNewFacilityInfoForm(forms.ModelForm):
 
 
 class BlogForm(forms.ModelForm):
+    message = forms.CharField(widget=forms.Textarea(), label='Blog', help_text='Share your experiences or thoughts')
+
     class Meta:
         model = Testimonials
         fields = ['message']
