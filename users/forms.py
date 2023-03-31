@@ -1,4 +1,4 @@
-from .models import Appointments, Facilities
+from .models import Appointments, Facilities, Testimonials
 from django import forms
 
 class ScheduleAppointmentsForm(forms.ModelForm):
@@ -39,3 +39,9 @@ class AddNewFacilityInfoForm(forms.ModelForm):
     class Meta:
         model = Facilities
         fields = ['role', 'facility_name', 'location', 'opening_hours', 'closing_hours', 'mobile_no']
+
+
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Testimonials
+        fields = ['message']
