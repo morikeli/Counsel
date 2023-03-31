@@ -209,7 +209,7 @@
 				
 				<div class="col-lg-4">
 					<div class="modal fade" id="all-blogs" tabindex="-1">
-						<div class="modal-dialog modal-dialog-scrollable">
+						<div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
 							<div class="modal-content">
 								<div class="modal-header">
 									<h5 class="modal-title">Testimonials</h5>
@@ -238,12 +238,12 @@
 							<h5 class="card-title"><i class="bi bi-play-circle-fill" style="color: red;"></i> Testimonials <span>| Today</span></h5>
 							<div class="activity">
 								<hr class="dropdown-divider mt-0">
-								{% for test in testimonials reversed %}
+								{% for story in testimonials reversed %}
 								<div class="activity-item d-flex">
-									<img src="{{test.victim.profile_pic.url}}" class="rounded-circle" height="65px" width="65px" alt="img">
+									<img src="{{ story. }}" class="rounded-circle" height="65px" width="65px" alt="img">
 									<div class="activity-content">
-										<a href="{% url 'testimonials' %}" class="fw-bold text-dark">{{test.experience|truncatewords:9}}</a>
-										<div class="activite-label">{{test.created|timesince|slice:":6"}} ago</div>
+										<a href="{% url 'testimonials' %}" class="fw-bold text-dark">{{ story.experience|truncatewords:9 }}</a>
+										<div class="activite-label">{{ story.created|timesince|slice:":6" }} ago</div>
 									</div>									
 								</div>
 								<hr class="dropdown-divider mt-0">
@@ -269,7 +269,7 @@
 							<h5 class="card-title">Suggestions</h5>
 							<div class="news therapists">
 								<div class="post-item therapist-info">
-									<img src="" height="50px" width="40px" class="rounded-circle" alt="img">
+									<img src="" height="36px"width="36px" class="rounded-circle" alt="img">
 									<h4></h4>
 									<p></p>
 									<p></p>
