@@ -9,8 +9,8 @@ class Facilities(models.Model):
     facility_name = models.CharField(max_length=70, blank=False)
     location = models.CharField(max_length=70, blank=False)
     mobile_no = models.CharField(max_length=14, blank=False)
-    opening_hours = models.TimeField(blank=False)
-    closing_hours = models.TimeField(blank=False)
+    opening_hours = models.TimeField(blank=False, null=True)
+    closing_hours = models.TimeField(blank=False, null=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
@@ -19,8 +19,8 @@ class Facilities(models.Model):
         ordering = ['facility_name']
 
     def __str__(self):
-        return self.therapist
-
+        return f'{self.therapist}'
+    
 
 class Appointments(models.Model):
     id = models.CharField(max_length=25, primary_key=True, editable=False, unique=True)
@@ -39,7 +39,7 @@ class Appointments(models.Model):
         ordering = ['-scheduled']
 
     def __str__(self):
-        return self.patient
+        return f'{self.patient}'
 
 
 class Testimonials(models.Model):

@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import SignupForm, UpdateProfileForm
 from .models import User
 
@@ -22,8 +22,13 @@ def login_view(request):
             
             if user_account is not None:
                 if user_account.is_therapist is True:
-                    auth.login(request, user_account)
-                    return redirect('therapist_homepage', user_account.username)
+                    if user_account.facilities.therapist is user_account:
+                        if user_account.facilities.role == "" and user_account.facilities.facility_name == "":
+                            return redirect('medical_facility', user_account)
+                    
+                    else:
+                        auth.login(request, user_account)
+                        return redirect('therapist_homepage', user_account.username)
                 
                 else:
                     auth.login(request, user_account)

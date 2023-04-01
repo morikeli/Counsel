@@ -19,19 +19,11 @@
     {% block content %}
     {% endblock %}
     
-    {% if user.is_authenticated %}
-    <footer id="footer" class="footer">
-        <div class="copyright">
-            <strong><span>&copy; 2022 Counsel</span> | ALL RIGHTS RESERVED</strong>
-        </div>
-    </footer>
-    {% else %}
     <footer class="footer">
         <div class="copyright">
             <strong><span>&copy; 2022 Counsel</span> | ALL RIGHTS RESERVED</strong>
         </div>
     </footer>
-    {% endif %}
 
     <a href="{% url 'user_login' %}" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <script src="{% static 'apexcharts/apexcharts.min.js' %}"></script>

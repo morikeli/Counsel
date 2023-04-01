@@ -71,7 +71,7 @@ def blogs_view(request):
 
 # views to handle therapists requests
 @login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.is_therapist is True and user.therapistprofile.facilities is not None)
+@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_therapist is True)
 def therapists_homepage_view(request, therapist_name):
     therapist_obj = User.objects.get(username=therapist_name)
 
@@ -82,21 +82,22 @@ def therapists_homepage_view(request, therapist_name):
 
 # this view is used by a therapist to add medical facility he/she is employed.
 @login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is True and user.is_superuser is False and user.is_therapist is True)
-def update_facility_info_view(request):
+@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_therapist is True)
+def update_facility_info_view(request, therapist_name):
+    facility = Facilities.objects.get(therapist__username=therapist_name)
     form = AddNewFacilityInfoForm()
 
     if request.method == 'POST':
-        form = AddNewFacilityInfoForm(request.POST)
+        form = AddNewFacilityInfoForm(request.POST, instance=facility)
         if form.is_valid():
             new_facility_record = form.save(commit=False)
             new_facility_record.medic = request.user
             new_facility_record.save()
 
-            messages.success(request, 'Facility has been updated successfully!')
-            return redirect('medical_facility')
+            messages.success(request, 'This facility has been updated successfully!')
+            return redirect('therapist_homepage', therapist_name)
             
 
     context = {'AddFacilityForm': form}
-    return render(request, 'therapists/', context)
+    return render(request, 'therapists/register-facility.html', context)
 
