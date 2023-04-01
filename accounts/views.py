@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import SignupForm, UpdateProfileForm
 from .models import User
 
