@@ -22,8 +22,13 @@ def login_view(request):
             
             if user_account is not None:
                 if user_account.is_therapist is True:
-                    auth.login(request, user_account)
-                    return redirect('therapist_homepage', user_account.username)
+                    if user_account.facilities.therapist is user_account:
+                        if user_account.facilities.role == "" and user_account.facilities.facility_name == "":
+                            return redirect('medical_facility', user_account)
+                    
+                    else:
+                        auth.login(request, user_account)
+                        return redirect('therapist_homepage', user_account.username)
                 
                 else:
                     auth.login(request, user_account)
