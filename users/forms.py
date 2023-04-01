@@ -31,10 +31,16 @@ class AddNewFacilityInfoForm(forms.ModelForm):
 
     role = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_ROLE, required=True)
     facility_name = forms.CharField(widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), required=True)
-    location = forms.CharField(widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), required=True)
+    location = forms.CharField(
+        widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), 
+        help_text='Enter state/county and country where the facility is located, e.g. Dallas, Texas; Nairobi, Kenya', required=True)
     opening_hours = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time', 'class': 'mb-2'}), required=True)
-    closing_hours = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time', 'class': 'mb-2'}), required=True)
-    mobile_no = forms.CharField(widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), required=True)
+    closing_hours = forms.TimeField(
+        widget=forms.TimeInput(attrs={'type': 'time', 'class': 'mb-2'}), 
+        help_text='Enter time in 24-hour clock format', required=True)
+    mobile_no = forms.CharField(
+        widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), 
+        help_text='Enter your office mobile number', required=True)
 
     class Meta:
         model = Facilities
