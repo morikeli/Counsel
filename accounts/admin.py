@@ -7,6 +7,6 @@ from .models import User
 class UserLayout(UserAdmin):
     model = User
     add_form = SignupForm
-    list_display = ['username', 'email', 'gender', 'country', 'is_staff', 'date_joined',]
+    list_display = ['username', 'email', 'gender', 'marital_status', 'is_therapist', 'is_staff', 'date_joined',]
 
 admin.site.register(User, UserLayout)
