@@ -15,7 +15,7 @@ class User(AbstractUser):
     is_therapist = models.BooleanField(default=False)
     date_edited = models.DateTimeField(auto_now=True)
 
-    REQUIRED_FIELDS = ['username', 'email']
+    REQUIRED_FIELDS = ['username']
     USERNAME_FIELD = 'email'
 
     def __str__(self) -> str:
