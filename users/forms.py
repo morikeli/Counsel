@@ -1,4 +1,5 @@
 from .models import Therapists, TherapySessions, Blogs, BlogComments, TherapistRateScores
+from .utils import validate_uploaded_file
 from django import forms
 
 class TherapistRegistrationForm(forms.ModelForm):
@@ -99,7 +100,7 @@ class WriteBlogForm(forms.ModelForm):
             'type': 'file', 'class': 'mb-2',
         }),
         help_text='You can attach an image, audio or a video file to your blog.',
-        validators=[],
+        validators=[validate_uploaded_file],
     )
 
     class Meta:
