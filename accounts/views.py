@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.views import View
 from django.conf import settings
 from .forms import SignupForm, EditProfileForm
+from users.forms import TherapistRegistrationForm
 import os
 
 
@@ -29,7 +30,7 @@ class UserLoginView(View):
 class SignupView(SessionWizardView):
     """ This view enables a user to create new account. """
     file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'media'))
-    form_list = [SignupForm, ]
+    form_list = [SignupForm, TherapistRegistrationForm]
     template_name = 'accounts/signup.html'
 
     def done(self, form_list, **kwargs):
