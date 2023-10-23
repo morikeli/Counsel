@@ -18,7 +18,7 @@ class Therapists(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str or None:
-        return self.therapist
+        return self.name
     
     class Meta:
         ordering = ['therapist', 'workplace']
@@ -78,7 +78,7 @@ class TherapistRateScores(models.Model):
     id = models.CharField(max_length=30, primary_key=True, editable=False, unique=True)
     therapist = models.ForeignKey(Therapists, on_delete=models.CASCADE, editable=False)
     rating = models.PositiveIntegerField(default=0, editable=False)
-    feedback = models.TextField()
+    feedback = models.TextField(null=True, blank=True)
     voting_date = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(auto_now=True)
 
