@@ -46,7 +46,7 @@ class Blogs(models.Model):
     id = models.CharField(max_length=30, primary_key=True, editable=False, unique=True)
     blogger = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
     blog = models.TextField(blank=False)
-    attached_file = models.FileField(upload_to='Blogs/Posts/files', blank=True)
+    attached_file = models.FileField(upload_to='Blogs/Posts/file-uploads', blank=True)
     total_likes = models.PositiveIntegerField(default=0, editable=False)
     total_comments = models.PositiveIntegerField(default=0, editable=False)
     date_posted = models.DateTimeField(auto_now_add=True)
