@@ -1,4 +1,4 @@
-from .forms import BookTherapySessionForm, WriteBlogForm, WriteBlogCommentsForm, RateTherapistsForm
+from .forms import ApproveTherapySessionForm, BookTherapySessionForm, WriteBlogForm, WriteBlogCommentsForm, RateTherapistsForm
 from .models import Therapists, TherapySessions, Blogs, BlogComments, TherapistRateScores
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
@@ -143,3 +143,34 @@ class TherapistDetailView(View):
 
         }
         return render(request, self.template_name, context)
+
+@method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is True)
+class ApproveTherapySessionView(View):
+    form_class = ApproveTherapySessionForm
+    template_name = 'users/approve.html'
+
+    def get(self, request, therapy_session, *args, **kwargs):
+        booked_session = TherapySessions.objects.get(id=therapy_session)
+        form = self.form_class(instance=booked_session)
+
+        context = {
+            'ApproveBookedSessionForm': form,
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, therapy_session, *args, **kwargs):
+        booked_session = TherapySessions.objects.get(id=therapy_session)
+        form = self.form_class(request.POST, instance=booked_session)
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(request, 'Therapy session approved successfully!')
+            return redirect('approve_session')
+
+        context = {
+            'ApproveBookedSessionForm': form,
+        }
+        return render(request, self.template_name, context)
+
