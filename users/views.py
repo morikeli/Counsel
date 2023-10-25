@@ -95,7 +95,8 @@ class ViewBlogandPostCommentsView(View):
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is False)
 class TherapistDetailView(View):
-    """ This view displays info. about a unique therapist and allow the user to book sessions and rate the therapist. """
+    """ This view displays info. about a given therapist and allows the user to book a therapy session with the therapist in addition to rating the therapist. """
+
     booking_form_class = BookTherapySessionForm
     rating_form_class = RateTherapistsForm
     template_name = 'users/rate.html'
