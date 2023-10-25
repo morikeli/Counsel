@@ -87,6 +87,7 @@ class TherapistRateScores(models.Model):
     
     id = models.CharField(max_length=30, primary_key=True, editable=False, unique=True)
     therapist = models.ForeignKey(Therapists, on_delete=models.CASCADE, editable=False)
+    voter = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
     rating = models.PositiveIntegerField(default=0, editable=False)
     feedback = models.TextField(null=True, blank=True)
     voting_date = models.DateTimeField(auto_now_add=True)
