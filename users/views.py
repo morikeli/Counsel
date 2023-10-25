@@ -146,6 +146,27 @@ class TherapistDetailView(View):
 
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is True)
+class DashboardView(View):
+    """ This view displays a therapist's dashboard. """
+
+    template_name = 'therapists/homepage.html'
+
+    def get(self, request, therapist, pk, *args, **kwargs):
+
+        context = {
+
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, therapist, pk, *args, **kwargs):
+
+        context = {
+
+        }
+        return render(request, self.template_name, context)
+
+@method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is True)
 class ApproveTherapySessionView(View):
     """ This view enables a therapist to approve a booked session. """
 
