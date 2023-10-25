@@ -148,7 +148,7 @@ class TherapistDetailView(View):
 @method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is True)
 class ApproveTherapySessionView(View):
     form_class = ApproveTherapySessionForm
-    template_name = 'users/approve.html'
+    template_name = 'therapists/approve.html'
 
     def get(self, request, therapy_session, *args, **kwargs):
         booked_session = TherapySessions.objects.get(id=therapy_session)
