@@ -57,35 +57,6 @@ class HomepageView(View):
 
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is False)
-class BookTherapySessionsView(View):
-    """ This view enables a user to book therapy sessions. """
-
-    form_class = BookTherapySessionForm
-    template_name = 'users/book-session.html'
-
-    def get(self, request, therapist_id, *args, **kwargs):
-        form = self.form_class()
-
-        context = {'BookingSessionsForm': form}
-        return render(request, self.template_name, context)
-    
-    def post(self, request, therapist_id, *args, **kwargs):
-        form = self.form_class(request.POST)
-
-        if form.is_valid():
-            new_session = form.save(commit=False)
-            new_session.therapist = therapist_id
-            new_session.patient = request.user
-            new_session.save()
-
-            messages.success(request, 'Therapy session request successfully submitted!')
-            return redirect('book_session')
-
-        context = {'BookingSessionsForm': form}
-        return render(request, self.template_name, context)
-
-@method_decorator(login_required(login_url='login'), name='get')
-@method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is False)
 class ViewBlogandPostCommentsView(View):
     """ This view enables a user to see all comments of a given blog and also post comments related to the blog. """
 
