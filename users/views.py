@@ -10,6 +10,8 @@ from django.views import View
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is False)
 class HomepageView(View):
+    """ This is the view responsible for handling a user's homepage requests and responses. """
+
     form_class_blog = WriteBlogForm
     form_class_comment = WriteBlogCommentsForm
     template_name = 'users/homepage.html'
@@ -56,6 +58,8 @@ class HomepageView(View):
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is False)
 class BookTherapySessionsView(View):
+    """ This view enables a user to book therapy sessions. """
+
     form_class = BookTherapySessionForm
     template_name = 'users/book-session.html'
 
@@ -83,6 +87,8 @@ class BookTherapySessionsView(View):
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is False)
 class ViewBlogandPostCommentsView(View):
+    """ This view enables a user to see all comments of a given blog and also post comments related to the blog. """
+
     form_class = WriteBlogCommentsForm
     template_name = 'users/blog.html'
     

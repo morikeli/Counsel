@@ -3,6 +3,8 @@ from accounts.models import User
 from django.db import models
 
 class Therapists(models.Model):
+    """ This model stores info of all therapists. Its an extension of therapist profile. """
+    
     id = models.CharField(max_length=30, primary_key=True, unique=True, editable=False)
     name = models.OneToOneField(User, on_delete=models.CASCADE, editable=False)
     workplace = models.CharField(max_length=70, blank=False)
@@ -25,6 +27,8 @@ class Therapists(models.Model):
         verbose_name_plural = 'Therapists'
     
 class TherapySessions(models.Model):
+    """ This model stores info about booked therapy sessions. """
+    
     id = models.CharField(max_length=30, primary_key=True, editable=False, unique=True)
     therapist = models.ForeignKey(Therapists, on_delete=models.CASCADE, editable=False)
     patient = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
@@ -43,6 +47,8 @@ class TherapySessions(models.Model):
         verbose_name_plural = 'Therapy sessions records'
 
 class Blogs(models.Model):
+    """ This model stores blogs (i.e., life experiences, testimonials) uploaded by users. """
+    
     id = models.CharField(max_length=30, primary_key=True, editable=False, unique=True)
     blogger = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
     blog = models.TextField(blank=False)
@@ -60,6 +66,8 @@ class Blogs(models.Model):
         verbose_name_plural = 'Testimonials'
 
 class BlogComments(models.Model):
+    """ These are comments related to an uploaded blogs. """
+    
     id = models.CharField(max_length=30, primary_key=True, editable=False, unique=True)
     blog = models.ForeignKey(Blogs, on_delete=models.CASCADE, editable=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
@@ -75,6 +83,8 @@ class BlogComments(models.Model):
         verbose_name_plural = 'Comments'
 
 class TherapistRateScores(models.Model):
+    """ This model stores info about a therapist's rating. """
+    
     id = models.CharField(max_length=30, primary_key=True, editable=False, unique=True)
     therapist = models.ForeignKey(Therapists, on_delete=models.CASCADE, editable=False)
     rating = models.PositiveIntegerField(default=0, editable=False)

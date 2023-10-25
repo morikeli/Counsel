@@ -4,6 +4,8 @@ from django.db import models
 from PIL import Image
 
 class User(AbstractUser):
+    """ This is the base user model. """
+    
     id = models.CharField(primary_key=True, max_length=30, unique=True, editable=False)
     email = models.EmailField(unique=True, blank=False)
     gender = models.CharField(max_length=7, blank=False)
