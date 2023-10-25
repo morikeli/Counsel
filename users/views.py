@@ -1,5 +1,5 @@
 from .forms import BookTherapySessionForm, WriteBlogForm, WriteBlogCommentsForm, RateTherapistsForm
-from .models import TherapySessions, Blogs, BlogComments, TherapistRateScores
+from .models import Therapists, TherapySessions, Blogs, BlogComments, TherapistRateScores
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
