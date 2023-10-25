@@ -147,6 +147,8 @@ class TherapistDetailView(View):
 @method_decorator(login_required(login_url='login'), name='get')
 @method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is True)
 class ApproveTherapySessionView(View):
+    """ This view enables a therapist to approve a booked session. """
+
     form_class = ApproveTherapySessionForm
     template_name = 'therapists/approve.html'
 
