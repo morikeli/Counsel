@@ -14,16 +14,36 @@ import os
 
 
 class UserLoginView(View):
+    form_class = AuthenticationForm
     template_name = 'accounts/login.html'
 
     def get(self, request, *args, **kwargs):
-        form = ''
+        form = self.form_class()
 
         context = {'LoginForm': form}
         return render(request, self.template_name, context)
     
     def post(self, request, *args, **kwargs):
-        form = ''
+        form = self.form_class(data=request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            
+            user_acc = auth.authenticate(username=username, password=password)
+
+            if user_acc is None:    # check if user account exists.
+                messages.error(request, 'Invalid credentials! Please try again.')
+                return redirect('login')
+            
+            else:
+                if user_acc.is_therapist is False:
+                    auth.login(request, user_acc)
+                    return redirect('homepage')   # redirect user to patient's homepage
+                
+                else:
+                    auth.login(request, user_acc)
+                    return redirect('therapist_dashboard')   # redirect user to therapist homepage
 
         context = {'LoginForm': form}
         return render(request, self.template_name, context)
