@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from formtools.wizard.views import SessionWizardView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.views import LogoutView
 from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.contrib import auth, messages
 from django.views import View
 from django.conf import settings
 from .forms import SignupForm, EditProfileForm
