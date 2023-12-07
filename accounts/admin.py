@@ -1,13 +1,12 @@
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
+from .models import User
 from .forms import SignupForm
 from .models import User
 
-
-class UsersLayout(UserAdmin):
+class UserLayout(UserAdmin):
     model = User
     add_form = SignupForm
-    list_display = ['username', 'gender', 'marital_status', 'is_staff', 'is_therapist']
-    readonly_fields = ['gender', 'phone_no', 'dob', 'marital_status', 'is_therapist', 'profile_pic']
+    list_display = ['username', 'email', 'gender', 'marital_status', 'is_therapist', 'is_staff', 'date_joined',]
 
-admin.site.register(User, UsersLayout)
+admin.site.register(User, UserLayout)

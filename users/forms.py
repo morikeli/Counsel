@@ -1,55 +1,161 @@
-from .models import Appointments, Facilities, Testimonials
+from .models import Therapists, TherapySessions, Blogs, BlogComments, TherapistRateScores
+from .utils import validate_uploaded_file
 from django import forms
 
-class ScheduleAppointmentsForm(forms.ModelForm):
-    # try using a qs to select all therapists in a select field
-    SELECT_THERAPISTS = (
-        (None, '-- Select therapist --'),
-
+class TherapistRegistrationForm(forms.ModelForm):
+    workplace = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'text', 'class': 'mb-0',
+        }),
+        help_text='Enter the name of hospital or school or facility you are currently working.',
     )
-    SELECT_SESSION = (
-        (None, '-- Select type of session --'),
-        ('Physical Session', 'Physical Session'),
-        ('Virtual session', 'Virtual Session'),
+    mobile_no = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'tel', 'class': 'mb-0',
+        }),
+        help_text='Enter mobile no. you use at your workplace.',
+        label='Mobile number',
     )
-
-    therapist_name = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_THERAPISTS, required=True)
-    appointment_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'mb-2'}), required=True)
-    appointment_date = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time', 'class': 'mb-2'}), required=True)
-    session = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_SESSION, required=True)
-    class Meta:
-        model = Appointments
-        fields = ['therapist_name', 'appointment_date', 'appointment_time', 'session']
-
-
-class AddNewFacilityInfoForm(forms.ModelForm):
-    SELECT_ROLE = (
-        (None, '-- Select role --'),
-        ('Psychiatrist', 'Psychiatrist'),
-        ('Therapist', 'Therapist')
+    county = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'text', 'class': 'mb-0',
+        }),
+        help_text='Enter county of your workplace',
     )
-
-    role = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_ROLE, required=True)
-    facility_name = forms.CharField(widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), required=True)
-    location = forms.CharField(
-        widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), 
-        help_text='Enter state/county and country where the facility is located, e.g. Dallas, Texas; Nairobi, Kenya', required=True)
-    opening_hours = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time', 'class': 'mb-2'}), required=True)
-    closing_hours = forms.TimeField(
-        widget=forms.TimeInput(attrs={'type': 'time', 'class': 'mb-2'}), 
-        help_text='Enter time in 24-hour clock format', required=True)
-    mobile_no = forms.CharField(
-        widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), 
-        help_text='Enter your office mobile number', required=True)
+    sub_county = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'text', 'class': 'mb-0',
+        }),
+        help_text='Enter sub-county of your workplace',
+    )
+    opening_hours = forms.TimeField(widget=forms.TimeInput(attrs={
+            'type': 'time', 'class': 'mb-2',
+        }),
+    )
+    closing_hours = forms.TimeField(widget=forms.TimeInput(attrs={
+            'type': 'time', 'class': 'mb-2',
+        }),
+    )
 
     class Meta:
-        model = Facilities
-        fields = ['role', 'facility_name', 'location', 'opening_hours', 'closing_hours', 'mobile_no']
+        model = Therapists
+        fields = ['workplace', 'mobile_no', 'county', 'sub_county', 'opening_hours', 'closing_hours']
 
-
-class BlogForm(forms.ModelForm):
-    message = forms.CharField(widget=forms.Textarea(), label='Blog', help_text='Share your experiences or thoughts')
+class BookTherapySessionForm(forms.ModelForm):
+    SELECT_SESSION_TYPE = (
+        (None, '-- Select session type --'),
+        ('Physical', 'Physical session'),
+        ('Virtual', 'Virtual session'),
+    )
+    session_type = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-0',
+        }),
+        help_text='Select a therapy session you prefer?',
+        label='Therapy session',
+    )
 
     class Meta:
-        model = Testimonials
-        fields = ['message']
+        model = TherapySessions
+        fields = ['session_type']
+
+class ApproveTherapySessionForm(forms.ModelForm):
+    SELECT_SESSION_TYPE = (
+        (None, '-- Select session type --'),
+        ('Physical', 'Physical session'),
+        ('Virtual', 'Virtual session'),
+    )
+    therapist = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'text', 'class': 'mb-2'
+        }),
+        label="Therapist's name",
+    )
+    patient = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'text', 'class': 'mb-2'
+        }),
+        label="Patient's name",
+    )
+    session_type = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-0',
+        }),
+        help_text='Select a therapy session you prefer?',
+        label='Therapy session',
+    )
+    appointment_date = forms.DateField(widget=forms.DateInput(atrrs={
+        'type': 'date', 'class': 'mb-0',
+        }),
+        help_text='Schedule this session to the date of choice.',
+    )
+    appointment_time = forms.TimeField(widget=forms.TimeInput(atrrs={
+        'type': 'time', 'class': 'mb-0',
+        }),
+        help_text='Schedule this session to the date of choice.',
+    )
+
+    class Meta:
+        model = TherapySessions
+        fields = ['therapist', 'patient', 'session_type', 'appointment_date', 'appointment_type']
+
+class WriteBlogForm(forms.ModelForm):
+    blog = forms.CharField(widget=forms.Textarea(attrs={
+            'type': 'text', 'class': 'mb-2',
+        }),
+    )
+    attached_file = forms.FileField(widget=forms.FileInput(attrs={
+            'type': 'file', 'class': 'mb-2',
+        }),
+        help_text='You can attach an image, audio or a video file to your blog.',
+        validators=[validate_uploaded_file],
+    )
+
+    class Meta:
+        model = Blogs
+        fields = ['blog', 'attached_file']
+
+class WriteBlogCommentsForm(forms.ModelForm):
+    comment = forms.CharField(widget=forms.Textarea(attrs={
+            'type': 'text', 'class': 'mb-2',
+        }),
+    )
+
+    class Meta:
+        model = BlogComments
+        fields = ['comment']
+
+class RateTherapistsForm(forms.ModelForm):
+    rating = forms.CharField(widget=forms.NumberInput(attrs={
+            'type': 'number', 'class': 'mb-2',
+        }),
+    )
+    feedback = forms.CharField(widget=forms.Textarea(attrs={
+            'type': 'text', 'class': 'mb-0',
+        }),
+        help_text='Feel free to write a positive review or complaints about this therapist.'
+    )
+
+    class Meta:
+        model = TherapistRateScores
+        fields = ['rating', 'feedback']
+
+# Edit forms.
+
+class EditBlogForm(forms.ModelForm):
+    blog = forms.CharField(widget=forms.Textarea(attrs={
+            'type': 'text', 'class': 'mb-2',
+        }),
+    )
+    attached_file = forms.FileField(widget=forms.FileInput(attrs={
+            'type': 'file', 'class': 'mb-2',
+        }),
+        help_text='You can attach an image, audio or a video file to your blog.',
+        validators=[],
+    )
+
+    class Meta:
+        model = Blogs
+        fields = ['blog', 'attached_file']
+
+class EditCommentsForm(forms.ModelForm):
+    comment = forms.CharField(widget=forms.Textarea(attrs={
+            'type': 'text', 'class': 'mb-2',
+        }),
+    )
+
+    class Meta:
+        model = BlogComments
+        fields = ['comment']

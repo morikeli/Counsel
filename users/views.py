@@ -1,103 +1,199 @@
+from .forms import ApproveTherapySessionForm, BookTherapySessionForm, WriteBlogForm, WriteBlogCommentsForm, RateTherapistsForm
+from .models import Therapists, TherapySessions, Blogs, BlogComments, TherapistRateScores
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .forms import ScheduleAppointmentsForm, AddNewFacilityInfoForm, BlogForm
+from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from accounts.models import User
-from .models import Facilities, Appointments, Testimonials
-
-# views to handle patient requests
-@login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_therapist is False)
-def patient_homepage_view(request, patient_name):
-    patient_obj = User.objects.get(username=patient_name)
-    total_appointments = Appointments.objects.filter(patient=request.user).count()
-    total_sessions = Appointments.objects.filter(patient=request.user, is_through=True).count()
-    testimonials = Testimonials.objects.all()
-    user_sessions = Appointments.objects.filter(patient=request.user, is_through=False)     # used in a table
-
-    context = {
-        'total_sessions': total_sessions, 'total_appointments': total_appointments,
-        'user_sessions': user_sessions, 'testimonials': testimonials,
-    }
-    return render(request, 'users/homepage.html', context)
+from django.views import View
 
 
-@login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_therapist is False)
-def available_therapists_view(request):
-    form = ScheduleAppointmentsForm()
+@method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is False)
+class HomepageView(View):
+    """ This is the view responsible for handling a user's homepage requests and responses. """
 
-    if request.method == 'POST':
-        form = ScheduleAppointmentsForm(request.POST)
+    form_class_blog = WriteBlogForm
+    form_class_comment = WriteBlogCommentsForm
+    template_name = 'users/homepage.html'
+
+    def get(self, request, *args, **kwargs):
+        blog_form = self.form_class_blog()
+        comment_form = self.form_class_comment()
+
+        context = {
+            'PostBlogsForm': blog_form,
+            'PostCommentsForm': comment_form,
+
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, *args, **kwargs):
+        blog_form = self.form_class_blog(request.POST, request.FILES)
+        comment_form = self.form_class_comment(request.POST, request.FILES)
+
+        if blog_form.is_valid():
+            form = blog_form.save(commit=False)
+
+            form.blogger = request.user
+            form.save()
+
+            messages.info(request, 'Blog posted successfully!')
+            return redirect('homepage')
+        
+        if comment_form.is_valid():
+            form = comment_form.save(commit=False)
+            form.author = request.user
+            form.save()
+
+            messages.info(request, 'Comment posted successfully!')
+            return redirect('homepage')
+
+        context = {
+            'PostBlogsForm': blog_form,
+            'PostCommentsForm': comment_form,
+
+        }
+        return render(request, self.template_name, context)
+
+@method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is False)
+class ViewBlogandPostCommentsView(View):
+    """ This view enables a user to see all comments of a given blog and also post comments related to the blog. """
+
+    form_class = WriteBlogCommentsForm
+    template_name = 'users/blog.html'
+    
+    def get(self, request, blog_id, *args, **kwargs):
+        blog = Blogs.objects.get(id=blog_id)
+        form = self.form_class()
+
+        context = {
+            'PostCommentsForm': form,
+
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, blog_id, *args, **kwargs):
+        blog = Blogs.objects.get(id=blog_id)
+        form = self.form_class(request.POST, request.FILES)
+
         if form.is_valid():
-            patient = form.save(commit=False)
-            patient.name = request.user
-            patient.save()
+            new_comment = form.save(commit=False)
+            new_comment.blog = blog
+            new_comment.author = request.user
+            new_comment.save()
 
-            messages.success(request, 'Appointment schedule successfully!')
-            return redirect('schedule_appointment')
+            messages.info(request, 'Comment posted successfully!')
+            return redirect('view_blog_and_comment')
 
-    therapists = Facilities.objects.all()
-    context = {'ScheduleAppointmentForm': form, 'therapists': therapists, 'total_therapists': therapists.count()}
-    return render(request, 'users/therapists.html', context)
+        context = {
+            'PostCommentsForm': form,
 
-@login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_therapist is False)
-def sessions_view(request, name):
-    sessions = Appointments.objects.get(patient=request.user)
+        }
+        return render(request, self.template_name, context)
 
-    context = {'user_sessions': sessions}
-    return render(request, 'users/sessions.html', context)
+@method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is False)
+class TherapistDetailView(View):
+    """ This view displays info. about a given therapist and allows the user to book a therapy session with the therapist in addition to rating the therapist. """
 
-@login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_therapist is False)
-def blogs_view(request):
-    testimonials = Testimonials.objects.all()
-    form = BlogForm()
+    booking_form_class = BookTherapySessionForm
+    rating_form_class = RateTherapistsForm
+    template_name = 'users/rate.html'
 
-    if request.method == 'POST':
-        form = BlogForm(request.POST)
+    def get(self, request, therapist_id, *args, **kwargs):
+        therapist = Therapists.objects.get(id=therapist_id)
+        booking_form = self.booking_form_class()
+        rating_form = self.rating_form_class()
+
+        context = {
+            'BookTherapySessionForm': booking_form,
+            'RateTherapistForm': rating_form,
+
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, therapist_id, *args, **kwargs):
+        therapist = Therapists.objects.get(id=therapist_id)
+        booking_form = self.booking_form_class(request.POST)
+        rating_form = self.rating_form_class(request.POST)
+
+        if booking_form.is_valid():
+            new_session = booking_form.save(commit=False)
+            new_session.therapist = therapist
+            new_session.patient = request.user
+            new_session.save()
+
+            messages.info(request, 'Therapy session request submitted successfully!')
+            return redirect('therapist_details')
+        
+        if rating_form.is_valid():
+            new_rating_record = rating_form.save(commit=False)
+            new_rating_record.therapist = therapist
+            new_rating_record.voter = request.user
+            new_rating_record.therapist.total_votes += 1
+            new_rating_record.save()
+
+            messages.success(request, 'Thanks! Your feedback is highly appreciated!')
+            return redirect('therapist_details')
+
+        context = {
+            'BookTherapySessionForm': booking_form,
+            'RateTherapistForm': rating_form,
+
+        }
+        return render(request, self.template_name, context)
+
+@method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is True)
+class DashboardView(View):
+    """ This view displays a therapist's dashboard. """
+
+    template_name = 'therapists/homepage.html'
+
+    def get(self, request, therapist, pk, *args, **kwargs):
+
+        context = {
+
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, therapist, pk, *args, **kwargs):
+
+        context = {
+
+        }
+        return render(request, self.template_name, context)
+
+@method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(lambda user: (user.is_staff is False and user.is_superuser is False and user.is_active is True) or user.is_therapist is True)
+class ApproveTherapySessionView(View):
+    """ This view enables a therapist to approve a booked session. """
+
+    form_class = ApproveTherapySessionForm
+    template_name = 'therapists/approve.html'
+
+    def get(self, request, therapy_session, *args, **kwargs):
+        booked_session = TherapySessions.objects.get(id=therapy_session)
+        form = self.form_class(instance=booked_session)
+
+        context = {
+            'ApproveBookedSessionForm': form,
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, therapy_session, *args, **kwargs):
+        booked_session = TherapySessions.objects.get(id=therapy_session)
+        form = self.form_class(request.POST, instance=booked_session)
 
         if form.is_valid():
-            new_blog = form.save(commit=False)
-            new_blog.user = request.user
-            new_blog.save()
+            form.save()
 
-            messages.success(request, 'Blog uploaded successfully!')
-            return redirect('blogs')
+            messages.success(request, 'Therapy session approved successfully!')
+            return redirect('approve_session')
 
-    context = {'testimonials': testimonials, 'form': form}
-    return render(request, 'users/testimonials.html', context)
-
-# views to handle therapists requests
-@login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_therapist is True)
-def therapists_homepage_view(request, therapist_name):
-    therapist_obj = User.objects.get(username=therapist_name)
-
-
-    context = {}
-    return render(request, 'therapists/homepage.html', context)
-
-
-# this view is used by a therapist to add medical facility he/she is employed.
-@login_required(login_url='user_login')
-@user_passes_test(lambda user: user.is_staff is False and user.is_superuser is False and user.is_therapist is True)
-def update_facility_info_view(request, therapist_name):
-    facility = Facilities.objects.get(therapist__username=therapist_name)
-    form = AddNewFacilityInfoForm()
-
-    if request.method == 'POST':
-        form = AddNewFacilityInfoForm(request.POST, instance=facility)
-        if form.is_valid():
-            new_facility_record = form.save(commit=False)
-            new_facility_record.medic = request.user
-            new_facility_record.save()
-
-            messages.success(request, 'This facility has been updated successfully!')
-            return redirect('therapist_homepage', therapist_name)
-            
-
-    context = {'AddFacilityForm': form}
-    return render(request, 'therapists/register-facility.html', context)
+        context = {
+            'ApproveBookedSessionForm': form,
+        }
+        return render(request, self.template_name, context)
 

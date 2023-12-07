@@ -1,22 +1,29 @@
-from django.db.models.signals import pre_save, post_save
-from django.dispatch import receiver
-from .models import Facilities, Appointments
-from accounts.models import User
+from .models import Therapists, TherapySessions, Blogs, BlogComments, TherapistRateScores
+from django.db.models.signals import pre_save
+from django import dispatch
 import uuid
 
-@receiver(pre_save, sender=Facilities)
-def generate_facilitiesID(sender, instance, **kwargs):
-    if instance.id == "":
-        instance.id = str(uuid.uuid4()).replace("-", "").upper()[:20]
+@dispatch.receiver(pre_save, sender=Therapists)
+def generate_therapistsID(sender, instance, **kwargs):
+    if instance.id == '':
+        instance.id = str(uuid.uuid4()).replace('-', '')[:30]
 
-@receiver(pre_save, sender=Appointments)
-def generate_appointmentsID(sender, instance, **kwargs):
-    if instance.id == "":
-        instance.id = str(uuid.uuid4()).replace("-", "").upper()[:20]
+@dispatch.receiver(pre_save, sender=TherapySessions)
+def generate_sessionsID(sender, instance, **kwargs):
+    if instance.id == '':
+        instance.id = str(uuid.uuid4()).replace('-', '')[:30]
 
-@receiver(post_save, sender=User)
-def create_work_profile(sender, created, instance, **kwargs):
-    if created:
-        if instance.is_therapist is True:
-            if instance.is_superuser is False and instance.is_staff is False:
-                Facilities.objects.create(therapist=instance)
+@dispatch.receiver(pre_save, sender=Blogs)
+def generate_blogsID(sender, instance, **kwargs):
+    if instance.id == '':
+        instance.id = str(uuid.uuid4()).replace('-', '')[:30]
+
+@dispatch.receiver(pre_save, sender=BlogComments)
+def generate_commentsID(sender, instance, **kwargs):
+    if instance.id == '':
+        instance.id = str(uuid.uuid4()).replace('-', '')[:30]
+
+@dispatch.receiver(pre_save, sender=TherapistRateScores)
+def generate_rate_scoresID(sender, instance, **kwargs):
+    if instance.id == '':
+        instance.id = str(uuid.uuid4()).replace('-', '')[:30]

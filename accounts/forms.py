@@ -1,57 +1,103 @@
 from django.contrib.auth.forms import UserCreationForm
+from .utils import validate_image_file
 from .models import User
 from django import forms
 
 
 class SignupForm(UserCreationForm):
     SELECT_GENDER = (
-        (None, '-- Select gender --'),
+        (None, '-- Select your gender --'),
         ('Male', 'Male'),
-        ('Female', 'Female'),
-    )
-    SELECT_MARITAL_STATUS = (
-        (None, '-- Select your marital status --'),
-        ('Single', 'Single'),
-        ('Engaged', 'Engaged'),
-        ('Married', 'Married'),
-        ('Divorced', 'Divorced')
+        ('Female', 'Female')
     )
 
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2', 'autofocus': 'on'}), required=True)
-    last_name = forms.CharField(widget=forms.TextInput(attrs={'type': 'text', 'class': 'mb-2'}), required=True)
-    username = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off', 'class': 'mb-2'}), required=True)
-    email = forms.CharField(widget=forms.TextInput(attrs={'type': 'email', 'class': 'mb-2'}), required=True)
-    dob = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'mb-2'}), required=True)
-    gender = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_GENDER, required=True)
-    phone_no = forms.CharField(widget=forms.TextInput(attrs={'type': 'tel', 'class': 'mb-2'}), required=True)
-    marital_status = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_MARITAL_STATUS, required=True)
-    is_therapist = forms.BooleanField(widget=forms.CheckboxInput(attrs={'type': 'checkbox', 'class': 'mt-2 mb-3'}), label='I am a therapist', required=False, help_text='Are you a certified/trained therapist, counsellor or a psychiatrist?')
-
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'text', 'class': 'mb-2', 'autofocus': True
+        }),
+        required=True,
+    )
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+           'type': 'text', 'class': 'mb-2',
+        }),
+        required=True,
+    )
+    username = forms.CharField(widget=forms.TextInput(attrs={
+           'type': 'text', 'class': 'mb-2',
+        }),
+        required=True,
+    )
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'type': 'email', 'class': 'mb-2',
+        }),
+    )
+    mobile_no = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'tel', 'class': 'mb-0',
+        }),
+        help_text='Enter your phone number and include your country code, e.g. +254112345678'
+    )
+    gender = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        choices=SELECT_GENDER,
+    )
+    dob = forms.DateField(widget=forms.DateInput(attrs={
+            'type': 'date', 'class': 'mb-2',
+        }),
+        required=True,
+    )
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'dob', 'gender', 'phone_no', 'marital_status', 'password1', 'password2', 'is_therapist']
+        fields = ['first_name', 'last_name', 'username', 'email', 'gender', 'dob', 'mobile_no', 'password1', 'password2']
 
-
-class UpdateProfileForm(forms.ModelForm):
+class EditProfileForm(forms.ModelForm):
     SELECT_GENDER = (
-        (None, '-- Select gender --'),
+        (None, '-- Select your gender --'),
         ('Male', 'Male'),
-        ('Female', 'Female'),
-    )
-    SELECT_MARITAL_STATUS = (
-        (None, '-- Select your marital status --'),
-        ('Single', 'Single'),
-        ('Engaged', 'Engaged'),
-        ('Married', 'Married'),
-        ('Divorced', 'Divorced')
+        ('Female', 'Female')
     )
 
-    dob = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'mb-2'}), required=True, disabled=True)
-    gender = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_GENDER, required=True, disabled=True)
-    phone_no = forms.CharField(widget=forms.TextInput(attrs={'type': 'tel', 'class': 'mb-2'}), required=True)
-    marital_status = forms.ChoiceField(widget=forms.Select(attrs={'type': 'select', 'class': 'mb-2'}), choices=SELECT_MARITAL_STATUS, required=True)
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'text', 'class': 'mb-2', 'autofocus': True
+        }),
+        required=True,
+        disabled=True,
+    )
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+           'type': 'text', 'class': 'mb-2',
+        }),
+        required=True,
+        disabled=True,
+    )
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'type': 'email', 'class': 'mb-2',
+        }),
+    )
+    gender = forms.ChoiceField(widget=forms.Select(attrs={
+            'type': 'select', 'class': 'mb-2',
+        }),
+        choices=SELECT_GENDER,
+        disabled=True,
+    )
+    dob = forms.DateField(widget=forms.DateInput(attrs={
+            'type': 'date', 'class': 'mb-2',
+        }),
+        required=True,
+        disabled=True,
+    )
+    mobile_no = forms.CharField(widget=forms.TextInput(attrs={
+            'type': 'tel', 'class': 'mb-0',
+        }),
+        help_text='Enter your phone number and include your country code, e.g. +254112345678'
+    )
+    profile_pic = forms.FileField(
+        widget=forms.FileInput(attrs={
+            'type': 'file', 'class': 'form-control mb-2', 'accept': '.jpg, .jpeg, .png',
+        }),
+        required=False,
+        validators=[validate_image_file],
+    )
 
     class Meta:
         model = User
-        fields = ['dob', 'gender', 'phone_no', 'marital_status', 'profile_pic']
+        fields = ['first_name', 'last_name', 'email', 'gender', 'dob', 'mobile_no', 'profile_pic']

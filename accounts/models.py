@@ -1,36 +1,35 @@
+from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from PIL import Image
 
-
 class User(AbstractUser):
-    id = models.CharField(max_length=25, primary_key=True, editable=False, unique=True)
+    """ This is the base user model. """
+    
+    id = models.CharField(primary_key=True, max_length=30, unique=True, editable=False)
     email = models.EmailField(unique=True, blank=False)
     gender = models.CharField(max_length=7, blank=False)
-    phone_no = models.CharField(max_length=14, blank=False)
-    age = models.PositiveIntegerField(default=0, editable=False)
-    dob = models.DateField(blank=False, null=True)
-    profile_pic = models.ImageField(upload_to='Patients-Dps/', default='default.png')
-    marital_status = models.CharField(max_length=30, blank=False)
+    mobile_no = PhoneNumberField(blank=False)
+    age = models.PositiveSmallIntegerField(default=0, editable=False)
+    dob = models.DateField(null=True, blank=False)
+    marital_status = models.CharField(max_length=10, blank=False)
+    profile_pic = models.ImageField(upload_to='Users/dps/', default='default.png')
     is_therapist = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    date_edited = models.DateTimeField(auto_now=True)
 
-    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'email'
 
-    class Meta:
-        verbose_name_plural = 'Users'
-        ordering = ['username']
-
-    def __str__(self):
+    def __str__(self) -> str:
         return self.username
-
+    
     def save(self, *args, **kwargs):
-        super(User, self).save(*args, **kwargs)
+        super(self, User).save(*args, **kwargs)
 
-        dp = Image.open(self.profile_pic.path)
-        if dp.height > 500 and dp.width > 500:
-            output_size = (500, 500)
-            dp.thumbnail(output_size)
-            dp.save(self.profile_pic.path)
+        img = Image.open(self.profile_pic.path)
+        
+        if img.height >= 320 and img.width >= 320:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.profile_pic.path)
+        
