@@ -86,6 +86,7 @@ class SignupView(SessionWizardView):
         return redirect('login')
 
 @method_decorator(login_required(login_url='login'), name='get')
+@method_decorator(user_passes_test(lambda user: (user.is_staff is False and user.is_superuser is False)), name='get')
 class EditProfileView(View):
     form_class = EditProfileForm
     template_name = 'accounts/profile.html'
