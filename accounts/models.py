@@ -10,7 +10,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, blank=False)
     gender = models.CharField(max_length=7, blank=False)
     mobile_no = PhoneNumberField(blank=False)
-    age = models.PositiveSmallIntegerField(default=0, editable=False)
+    age = models.PositiveIntegerField(default=0, editable=False)
     dob = models.DateField(null=True, blank=False)
     marital_status = models.CharField(max_length=10, blank=False)
     profile_pic = models.ImageField(upload_to='Users/dps/', default='default.png')
