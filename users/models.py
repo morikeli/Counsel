@@ -16,6 +16,7 @@ class Therapists(models.Model):
     total_votes = models.PositiveIntegerField(default=0, editable=False)
     longitude = models.FloatField(blank=False, editable=False, default=0)
     latitude = models.FloatField(blank=False, editable=False, default=0)
+    rating = models.PositiveIntegerField(default=0, editable=False)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -23,7 +24,7 @@ class Therapists(models.Model):
         return self.name
     
     class Meta:
-        ordering = ['therapist', 'workplace']
+        ordering = ['name', 'workplace']
         verbose_name_plural = 'Therapists'
     
 class TherapySessions(models.Model):
@@ -31,7 +32,7 @@ class TherapySessions(models.Model):
     
     id = models.CharField(max_length=30, primary_key=True, editable=False, unique=True)
     therapist = models.ForeignKey(Therapists, on_delete=models.CASCADE, editable=False)
-    patient = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
+    patient = models.ForeignKey(User, on_delete=models.CASCADE)
     session_type = models.CharField(max_length=20, blank=False)
     appointment_date = models.DateField(blank=False, null=False)
     appointment_time = models.TimeField(blank=False, null=False)
@@ -88,7 +89,7 @@ class TherapistRateScores(models.Model):
     id = models.CharField(max_length=30, primary_key=True, editable=False, unique=True)
     therapist = models.ForeignKey(Therapists, on_delete=models.CASCADE, editable=False)
     voter = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
-    rating = models.PositiveIntegerField(default=0, editable=False)
+    rating = models.PositiveIntegerField(default=0)
     feedback = models.TextField(null=True, blank=True)
     voting_date = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(auto_now=True)
