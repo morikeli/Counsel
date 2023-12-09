@@ -48,24 +48,42 @@ class UserLoginView(View):
         context = {'LoginForm': form}
         return render(request, self.template_name, context)
 
+
+def show_therapist_registration_form(wizard):
+    """
+        This function will display `TherapistRegistrationForm` in the form wizard, if `is_therapist` is True.
+    """
+
+    cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
+    is_therapist = cleaned_data.get('is_therapist')
+    return is_therapist
+
+
 class SignupView(SessionWizardView):
     """ This view enables a user to create new account. """
+
     file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'media'))
     form_list = [SignupForm, TherapistRegistrationForm]
     template_name = 'accounts/signup.html'
+    condition_dict = {
+        '1': show_therapist_registration_form,
+    }
+
 
     def done(self, form_list, **kwargs):
-        registration_form = form_list[1]
-        new_user = form_list[0].save(commit=False)
+        user_form = form_list[0]
+
+        if user_form.cleaned_data.get('is_therapist') is True:
+            user = user_form.save()
+            new_therapist = form_list[1].save(commit=False)
+            new_therapist.name = user
+            new_therapist.save()
         
-        if registration_form.is_valid():
-            new_store = registration_form.save(commit=False)
-            new_store.owner = new_user
-            new_user.save()
-            new_store.save()
+        else:
+            user = user_form.save()
             
-            messages.success(self.request, 'Account successfully created!')
-            return redirect('login')
+        messages.success(self.request, 'Account successfully created!')
+        return redirect('login')
 
 @method_decorator(login_required(login_url='login'), name='get')
 class EditProfileView(View):
