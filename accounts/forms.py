@@ -45,10 +45,17 @@ class SignupForm(UserCreationForm):
         }),
         required=True,
     )
+    is_therapist = forms.BooleanField(widget=forms.CheckboxInput(attrs={
+            'type': 'checkbox', 'class': 'my-2',
+        }),
+        required=False,
+        help_text='Check this box if you are a therapist',
+        label='Are you a therapist?'
+    )
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'gender', 'dob', 'mobile_no', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'username', 'email', 'gender', 'dob', 'mobile_no', 'is_therapist', 'password1', 'password2']
 
 class EditProfileForm(forms.ModelForm):
     SELECT_GENDER = (
