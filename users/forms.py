@@ -76,12 +76,12 @@ class ApproveTherapySessionForm(forms.ModelForm):
         help_text='Select a therapy session you prefer?',
         label='Therapy session',
     )
-    appointment_date = forms.DateField(widget=forms.DateInput(atrrs={
+    appointment_date = forms.DateField(widget=forms.DateInput(attrs={
         'type': 'date', 'class': 'mb-0',
         }),
         help_text='Schedule this session to the date of choice.',
     )
-    appointment_time = forms.TimeField(widget=forms.TimeInput(atrrs={
+    appointment_time = forms.TimeField(widget=forms.TimeInput(attrs={
         'type': 'time', 'class': 'mb-0',
         }),
         help_text='Schedule this session to the date of choice.',
@@ -89,7 +89,7 @@ class ApproveTherapySessionForm(forms.ModelForm):
 
     class Meta:
         model = TherapySessions
-        fields = ['therapist', 'patient', 'session_type', 'appointment_date', 'appointment_type']
+        fields = ['patient', 'session_type', 'appointment_date', 'session_type']
 
 class WriteBlogForm(forms.ModelForm):
     blog = forms.CharField(widget=forms.Textarea(attrs={
